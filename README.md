@@ -5,6 +5,7 @@ AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `ZambleStory` | 1920×1080 @ 30fps | 690 frames / 23.0s | Night/paper worlds, shape-driven transitions — the slow cut |
 | `ScreenCut` | 1920×1080 @ 30fps | 480 frames / 16.0s | Screen content — five transition mechanics inside one app shell |
 | `LongTake` | 1080×1920 @ 30fps | 900 frames / 30.0s | zamble product film in one unbroken camera move |
 | `ZambleTeaser` | 1080×1920 @ 30fps | 360 frames / 12.0s | Cyberpunk glitch teaser for zamble v2 |
@@ -26,6 +27,7 @@ npm start          # Remotion Studio — scrub the whole timeline
 ## Render
 
 ```bash
+npm run build:story  # ZambleStory  -> out/zamble-story.mp4
 npm run build:screen # ScreenCut    -> out/zamble-screencut.mp4
 npm run build:long   # LongTake     -> out/zamble-longtake.mp4
 npm run build:teaser # ZambleTeaser -> out/zamble-teaser.mp4
@@ -487,3 +489,54 @@ mark keeps a small breath so it never freezes solid.
 Diegetic first — this is an app, not a film, so the transitions get UI whooshes
 rather than cinema impacts. Frame-exact sheet in `src/desk/audio/cues.ts`, off by
 default; drop files into `public/audio/` and set `<AudioDesign enabled />`.
+
+---
+
+# Story
+
+23 seconds, five scenes, two worlds. A rebuild of `ScreenCut` around two notes:
+it was too fast to read, and every scene carried too much.
+
+## What changed, and why
+
+**Pacing.** Five scenes instead of six. Every hold is at least three seconds and
+every transition is 24 frames (0.8s) instead of 12–18. The payoff number counts up
+and then simply *sits there* for two seconds — a number nobody has time to read is
+decoration, not a claim.
+
+**Density.** One idea per scene. The grid of fourteen unreadable slide thumbnails
+is gone: a single slide at full size makes the same point and can actually be
+taken in. Type is much larger throughout.
+
+**Two worlds.** Night for the product at work, cream paper for the moments of
+understanding, alternating N–P–N–P–N. The light scenes are the film's breath — an
+all-dark piece gives the eye nowhere to rest. The paper palette (cream `#F4F1E8`,
+deep green `#0E7A5A`) is lifted straight from the brand sketches.
+
+## The transitions — shapes, not page flips
+
+| Frame | Mechanic | What happens |
+| --- | --- | --- |
+| 150 | **Zoom** | The camera pushes **through** the phrase being typed and comes out the other side on paper. The outgoing scene holds full opacity through the first 55% — that's what sells *through* rather than *fade*. |
+| 330 | **Grow** | The dot the mark's line resolves into swells until it **is** the next scene. Three layers: outgoing, a plain circle of the new world's colour, and the new scene clipped to that circle but fading in **later** — you read "a shape is growing", then "the shape is a place". |
+| 480 | **Push** | A sheet of paper slides up over the night scene, which drifts up and dims as it goes so both layers move together. |
+| 600 | **Collapse** | The paper world shrinks to a point, and the point is the mark. The inverse of `grow`, closing the film's shape language. |
+
+Scene 1 lays its prompt on two lines with the key phrase alone on the second,
+pinned to the exact vertical centre of frame — not a layout accident. The zoom
+pushes through it with transform-origin at dead centre, so the phrase has to *be*
+the centre for the camera to travel into it cleanly. Scene 1 also starts its own
+push-in at frame 118, so the camera is already moving when the transition takes
+over and the handover is invisible.
+
+## Things worth knowing if you edit it
+
+- **Every scene owns an opaque background.** A transparent scene lets the one
+  underneath show through, and both render at full strength — reading as two
+  screenshots stacked. The outgoing scene has to be genuinely occluded.
+- **Scene content must be underway before its transition lands.** A scene whose
+  animations start at its own `from` frame arrives empty, and the transition has
+  nothing to reveal. Every scene here starts its content 14–20 frames early.
+- **Transition length is the readability lever.** 24 frames is the floor for a
+  mechanic the eye can actually follow; below ~18 it registers as "something
+  happened" rather than as a move.

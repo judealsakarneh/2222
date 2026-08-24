@@ -5,6 +5,8 @@ import {RambleAd} from './RambleAd';
 import {ZambleTeaser} from './ZambleTeaser';
 import {LongTake} from './LongTake';
 import {ScreenCut} from './ScreenCut';
+import {ZambleStory} from './ZambleStory';
+import {DURATION as STORY_DURATION} from './story/lib/timeline';
 import {DURATION as SCREENCUT_DURATION} from './desk/lib/timeline';
 import {DURATION as TEASER_DURATION} from './teaser/lib/timeline';
 import {DURATION as LONGTAKE_DURATION} from './longtake/lib/camera';
@@ -14,6 +16,16 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* zamble — "Story". Night/paper worlds, shape-driven transitions. 23.0s. */}
+      <Composition
+        id="ZambleStory"
+        component={ZambleStory}
+        durationInFrames={STORY_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
       {/* zamble — "Screen Cut". 16:9 screen content, five transition mechanics. 16.0s. */}
       <Composition
         id="ScreenCut"
