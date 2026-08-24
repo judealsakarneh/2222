@@ -10,7 +10,8 @@
     "build:reel": "remotion render src/index.ts AEDemoReel out/demo-reel.mp4",
     "still": "remotion still src/index.ts RambleAd out/ramble-thumbnail.png",
     "typecheck": "tsc --noEmit",
-    "upgrade": "remotion upgrade"
+    "upgrade": "remotion upgrade",
+    "build:teaser": "remotion render src/index.ts ZambleTeaser out/zamble-teaser.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.516",

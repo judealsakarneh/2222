@@ -1,10 +1,11 @@
-# ramble. — product film
+# Motion projects
 
-Two Remotion compositions, everything drawn in code. No images, no video assets,
-no AI generation — every pixel is React, SVG, CSS and frame-driven maths.
+Remotion compositions, everything drawn in code. No images, no video assets, no
+AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `ZambleTeaser` | 1080×1920 @ 30fps | 360 frames / 12.0s | Cyberpunk glitch teaser for zamble v2 |
 | `RambleAd` | 1080×1920 @ 30fps | 600 frames / 20.0s | The ramble. product film, for Reels / TikTok |
 | `AEDemoReel` | 1080×1080 @ 30fps | 450 frames / 15.0s | Square reel of six After Effects style animations |
 
@@ -23,9 +24,10 @@ npm start          # Remotion Studio — scrub the whole timeline
 ## Render
 
 ```bash
-npm run build      # RambleAd   -> out/ramble.mp4
-npm run build:reel # AEDemoReel -> out/demo-reel.mp4
-npm run still      # single frame -> out/ramble-thumbnail.png
+npm run build:teaser # ZambleTeaser -> out/zamble-teaser.mp4
+npm run build        # RambleAd     -> out/ramble.mp4
+npm run build:reel   # AEDemoReel   -> out/demo-reel.mp4
+npm run still        # single frame -> out/ramble-thumbnail.png
 ```
 
 Or directly:
@@ -170,3 +172,112 @@ Audio is **off by default** so the project renders on a clean checkout. To enabl
 
 The bed is a constant low drone — two sine oscillators at 55Hz and 82.5Hz at gain
 0.016 — running under all 600 frames.
+
+---
+
+# zamble v2 teaser
+
+A 12-second cyberpunk product teaser: growth flex → asset montage → feature
+callouts → product reveal → CTA. Built from a frame-by-frame breakdown of a
+reference reel, rebuilt for zamble.
+
+## Structure
+
+```
+src/
+  ZambleTeaser.tsx            layer stack + scene timeline
+
+  teaser/lib/
+    timeline.ts               scene windows + global transition windows
+    tokens.ts                 colours, copy, brand name, easing
+    fonts.ts                  JetBrains Mono
+    ascii.ts                  the procedural ASCII generators
+
+  teaser/components/
+    GlitchLayer.tsx           RGB channel split + slice displacement (global)
+    GlitchText.tsx            chromatic-split text with glyph-noise resolve
+    Scanlines.tsx             CRT lines + sweeping band
+    TeaserGrain.tsx           reseeding film grain
+    CodeRain.tsx              upward code particles
+    DataCoords.tsx            scrolling telemetry
+    WireframeGrid.tsx         rotating grid + floating data points
+    AsciiCanvas.tsx           renders a generated ASCII frame
+    SceneGate.tsx             hard-cut scene mounting
+
+  teaser/scenes/
+    S1Counter.tsx             000-045  3277 -> 62000+ with digit scramble
+    S2Montage.tsx             045-120  8 hard cuts of ASCII art
+    S3Features.tsx            120-210  three lines typed into a terminal
+    S4Reveal.tsx              210-300  wordmark resolves out of noise
+    S5Cta.tsx                 300-360  "coming soon", flickering
+
+  teaser/audio/
+    cues.ts                   frame-exact cue sheet + layer notes
+    AudioDesign.tsx           wires cues to files (off by default)
+```
+
+## Design system
+
+| Token | Value |
+| --- | --- |
+| background | `#0a0a0a` |
+| primary (all live text) | `#00ffcc` |
+| accent | `#9333ea` |
+| highlight | `#ffffff` |
+| face | JetBrains Mono 400 / 700 / 800 |
+| easing | `cubic-bezier(0.22, 1, 0.36, 1)` — every move, no exceptions |
+
+## How the effects actually work
+
+**The glitch is real channel separation, not a coloured shadow.** `GlitchLayer`
+wraps the entire scene stack and renders it twice through `feColorMatrix`
+isolators — red-only and cyan-only — offset in opposite directions and
+recombined with `mix-blend-mode: screen`. Screen of red-only over cyan-only
+reconstructs the original exactly at zero offset, so the effect vanishes cleanly
+when intensity hits zero. On top of that, four horizontal slices are clipped
+copies of the same subtree torn sideways, re-rolled every 2 frames so the tear
+stutters instead of sliding.
+
+**Transitions are global, not per-scene.** Because `GlitchLayer` sits above all
+five scenes, a cut is one event that tears the whole frame — which is what a hard
+glitch cut is. Building it inside each scene would produce two crossfades wearing
+a glitch costume. Scenes themselves cut hard, with no dissolve.
+
+**The montage assets are generated, not drawn.** There are no images anywhere.
+`lib/ascii.ts` computes each frame's art from maths: a lambert-shaded sphere with
+an orbiting light, a z-buffered rotating torus, a bar-chart render, a signal
+trace, a scan grid, an interference field, and a shaded portrait bust. All are
+pure functions of `(frame, cols, rows)`.
+
+**Everything is frame-driven and reproducible.** No CSS keyframes, no
+transitions, no wall-clock timers, no `Math.random` — all scatter comes from the
+seeded hash in `src/lib/random.ts`, so every render is identical.
+
+**The glitch envelope is asymmetric** — fast build, fast decay. A symmetric ramp
+reads as a dissolve rather than a fault.
+
+### Things worth knowing if you edit it
+
+- **Rebranding is one line.** `BRAND` and `PRODUCT` in `teaser/lib/tokens.ts`.
+  All on-screen copy lives in `COPY` in the same file.
+- **The growth numbers are placeholders** carried over from the reference
+  (`STATS` in tokens.ts). Swap them for real figures before publishing.
+- **Only the last two digits of the counter scramble.** Scrambling all of them
+  destroys the number — the viewer stops reading a figure and sees noise.
+- **Glyphs are limited to the latin subset.** The tagline uses `->` rather than
+  `→` because U+2192 is not in the subset the font loads.
+- **`S2Montage` returns early when off-screen.** A scene component's body runs on
+  every frame of the film even when its gate renders null, so the montage bails
+  before computing ASCII (and before indexing its playlist with a negative cut
+  index).
+
+## Sound
+
+Frame-exact cue sheet in `src/teaser/audio/cues.ts` — low synth pad under
+everything, digital whooshes on the camera moves, keyboard ticks on the typed
+lines, glitch stutters on the hard cuts. Each entry records the layer stack the
+hit should be built from, because a single tone always sounds cheap.
+
+Off by default so the project renders on a clean checkout. To enable: drop files
+into `public/audio/` using the names in `cues.ts`, then change `<AudioDesign />`
+to `<AudioDesign enabled />` in `ZambleTeaser.tsx`.
