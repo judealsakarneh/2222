@@ -58,7 +58,7 @@ export const PgSlide: React.FC = () => {
         {/* Chart */}
         <div style={{flex: 1, display: 'flex', alignItems: 'flex-end', gap: 40, marginTop: 44, paddingBottom: 10}}>
           {BARS.map((v, i) => {
-            const start = -6 + i * 4;
+            const start = -22 + i * 4;
             const p = interpolate(local, [start, start + 16], [0, 1], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',

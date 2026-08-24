@@ -446,8 +446,29 @@ No two adjacent transitions share an axis or a mechanism.
 - **The crumb hands over out-then-in, never overlapping.** Cross-dissolving two
   different strings on top of each other renders as illegible mush.
 
+## The character
+
+`desk/components/ZambleMark.tsx` — a tangle that resolves into one clean line,
+with two eyes at the moment it works out what you meant. Chosen from three
+sketches because it is the only one that is a logo AND a character: it states the
+product in a single stroke. The other two are charming creatures but say nothing
+about what the product does.
+
+It is authored as ONE continuous path, left to right, so `pathLength` +
+`strokeDashoffset` makes the reveal literal — the stroke enters as chaos and
+leaves as structure because that is the order the path is drawn in. The eyes only
+open once the stroke has travelled past them: the character doesn't exist until
+the line has made sense of itself. It blinks on an uneven cycle and the whole
+mark keeps a small breath so it never freezes solid.
+
 ## Things worth knowing if you edit it
 
+- **Every page needs its OWN opaque background.** This is load-bearing. A
+  transparent page body lets the page underneath show straight through, so during
+  a transition both render at full strength and it reads as two screenshots
+  stacked — no amount of timing or easing can fix that. The outgoing page has to
+  be genuinely occluded. (This broke when the pages were unwrapped from their old
+  frame component, which had been supplying the background.)
 - **Incoming pages must be populated before their transition lands.** A page whose
   content starts at its own `from` frame renders as an empty blur for the whole
   transition. Every page here starts its content during the approach.

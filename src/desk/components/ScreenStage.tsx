@@ -20,9 +20,24 @@ import {D} from '../lib/tokens';
 
 const PAGE_COMPONENTS = [PgChat, PgResearch, PgBuild, PgSlide, PgExport, PgCta];
 
+/**
+ * Every page gets its OWN opaque background.
+ *
+ * This is load-bearing, not cosmetic. A page body with a transparent background
+ * lets the page underneath show straight through it, so during a transition both
+ * render at full strength and the result reads as two screenshots stacked rather
+ * than one replacing the other — no amount of timing or easing can fix that.
+ * The outgoing page must be genuinely occluded by the incoming one.
+ */
+const PAGE_BG = 'linear-gradient(180deg, #131C24 0%, #111A22 46%, #0E151C 100%)';
+
 const renderPage = (i: number): React.ReactNode => {
   const C = PAGE_COMPONENTS[i];
-  return <C />;
+  return (
+    <div style={{position: 'absolute', inset: 0, background: PAGE_BG, overflow: 'hidden'}}>
+      <C />
+    </div>
+  );
 };
 
 export const ScreenStage: React.FC = () => {

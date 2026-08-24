@@ -1,26 +1,27 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {INTER, SERIF} from '../../lib/fonts';
+import {ZambleMark} from '../components/ZambleMark';
 import {BRAND, D, EASE, label, ui} from '../lib/tokens';
 
 /**
  * PAGE 6 — CTA. Frames 426-480.
  *
  * Deliberately drops the app chrome: the product steps out of its own UI for the
- * close. The mark is a ragged waveform resolving into a clean line — rambling in,
- * structure out — drawn with pathLength so the reveal is exact.
+ * close.
+ *
+ * The mark draws itself here — a tangle resolving into one clean line, with eyes
+ * that open once the stroke has passed them. It is the whole product in a single
+ * stroke, so it gets the finale to itself and the wordmark arrives underneath it.
  */
 
 const A = 426;
-const MARK =
-  'M4 26 C 12 6, 18 44, 26 14 C 33 -6, 39 40, 47 22 C 54 8, 60 30, 68 26 L 116 26';
-const DASH = 300;
 
 export const PgCta: React.FC = () => {
   const frame = useCurrentFrame();
   const local = frame - A;
 
-  const draw = interpolate(local, [-12, 20], [DASH, 0], {
+  const draw = interpolate(local, [-14, 30], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
     easing: EASE,
@@ -53,24 +54,7 @@ export const PgCta: React.FC = () => {
         gap: 38,
       }}
     >
-      <svg
-        width={380}
-        height={(380 * 52) / 120}
-        viewBox="0 0 120 52"
-        fill="none"
-        style={{filter: `drop-shadow(0 0 18px rgba(23,232,168,0.55))`}}
-      >
-        <path
-          d={MARK}
-          stroke={D.signal}
-          strokeWidth={3}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          pathLength={DASH}
-          strokeDasharray={DASH}
-          strokeDashoffset={draw}
-        />
-      </svg>
+      <ZambleMark progress={draw} width={860} strokeWidth={12} />
 
       <div
         style={{
