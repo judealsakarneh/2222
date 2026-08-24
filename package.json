@@ -1,29 +1,32 @@
 {
-  "name": "ae-demo-reel",
+  "name": "ramble-motion",
   "version": "1.0.0",
   "private": true,
-  "description": "A single Remotion composition remaking six After Effects style motion animations entirely in code.",
+  "description": "Remotion motion projects: the ramble. product film (1080x1920) and a square After Effects style demo reel.",
   "scripts": {
     "start": "remotion studio src/index.ts",
-    "build": "remotion render src/index.ts AEDemoReel out/demo-reel.mp4",
-    "still": "remotion still src/index.ts AEDemoReel out/thumbnail.png",
+    "studio": "remotion studio src/index.ts",
+    "build": "remotion render src/index.ts RambleAd out/ramble.mp4",
+    "build:reel": "remotion render src/index.ts AEDemoReel out/demo-reel.mp4",
+    "still": "remotion still src/index.ts RambleAd out/ramble-thumbnail.png",
+    "typecheck": "tsc --noEmit",
     "upgrade": "remotion upgrade"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.0",
-    "@remotion/google-fonts": "^4.0.0",
-    "@remotion/tailwind": "^4.0.0",
-    "framer-motion": "^11.2.10",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "remotion": "^4.0.0"
+    "@remotion/cli": "4.0.516",
+    "@remotion/google-fonts": "4.0.516",
+    "@remotion/tailwind": "4.0.516",
+    "framer-motion": "11.18.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.516"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5"
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "autoprefixer": "10.5.4",
+    "postcss": "8.5.26",
+    "tailwindcss": "3.4.19",
+    "typescript": "5.9.3"
   }
 }
