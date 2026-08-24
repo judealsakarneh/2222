@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "upgrade": "remotion upgrade",
     "build:teaser": "remotion render src/index.ts ZambleTeaser out/zamble-teaser.mp4",
-    "build:long": "remotion render src/index.ts LongTake out/zamble-longtake.mp4"
+    "build:long": "remotion render src/index.ts LongTake out/zamble-longtake.mp4",
+    "build:screen": "remotion render src/index.ts ScreenCut out/zamble-screencut.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.516",

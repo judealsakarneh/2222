@@ -5,6 +5,7 @@ AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `ScreenCut` | 1920×1080 @ 30fps | 480 frames / 16.0s | Screen content — five transition mechanics inside one app shell |
 | `LongTake` | 1080×1920 @ 30fps | 900 frames / 30.0s | zamble product film in one unbroken camera move |
 | `ZambleTeaser` | 1080×1920 @ 30fps | 360 frames / 12.0s | Cyberpunk glitch teaser for zamble v2 |
 | `RambleAd` | 1080×1920 @ 30fps | 600 frames / 20.0s | The ramble. product film, for Reels / TikTok |
@@ -25,6 +26,7 @@ npm start          # Remotion Studio — scrub the whole timeline
 ## Render
 
 ```bash
+npm run build:screen # ScreenCut    -> out/zamble-screencut.mp4
 npm run build:long   # LongTake     -> out/zamble-longtake.mp4
 npm run build:teaser # ZambleTeaser -> out/zamble-teaser.mp4
 npm run build        # RambleAd     -> out/ramble.mp4
@@ -390,3 +392,77 @@ arrival blooms and travel swells. That single automation does more for the feel
 than any individual cue. Frame-exact sheet in `src/longtake/audio/cues.ts`.
 
 Off by default. Drop files into `public/audio/` and set `<AudioDesign enabled />`.
+
+---
+
+# Screen Cut
+
+Sixteen seconds, six views, **five completely different transitions**. Built as
+SCREEN CONTENT: play it full-screen and film it off a monitor, or post it as-is.
+
+## What this is not
+
+The reference reel this was modelled on shows a desk, plants and a keyboard —
+but those are the poster's **real room, filmed on a phone**. Only what is on the
+display is motion graphics. An AI breakdown of that reel described the desk as
+"3D layers with depth", which is a hallucination, and an earlier version of this
+composition wasted its effort building a CSS desk to match it. That is deleted.
+This renders the thing that goes on the display.
+
+## The anchor
+
+Every change happens inside a **persistent app shell**. The top bar and the
+bottom progress strip render once, outside the transition engine, and never move.
+They do the job a monitor bezel does in a filmed ad: the eye holds a fixed frame,
+so however violent the body gets, the change reads as a view swapping inside an
+application rather than as a cut to a different shot.
+
+That anchoring is what buys the variety — five mechanics in sixteen seconds and
+it still reads as one continuous take.
+
+## The five transitions
+
+| Frame | Mechanic | How it works |
+| --- | --- | --- |
+| 096 | **Parallax swipe** | Outgoing exits left 120%; incoming enters from right 120% **and 50px lower**, rising to rest. The vertical offset is the whole reason it reads as parallax and not a conveyor belt. 12px motion blur + 2.4px real chromatic aberration. |
+| 186 | **Feathered wipe** | 25px soft gradient mask with a hot emerald line riding the boundary. The leading edge turns "a rectangle growing" into "something being drawn". |
+| 276 | **Iris** | Circular reveal opening from 37% / 29% — the measured centre of the highlighted card in the grid, which is also the slide the next page shows. Motivated, not decorative. |
+| 360 | **Slice shuffle** | Six columns, alternating up/down, staggered left to right so the break sweeps rather than snaps. |
+| 426 | **Whip pan** | Horizontal stretch with **true directional blur** — `feGaussianBlur stdDeviation="N 0"` blurs on X only. CSS `blur()` is isotropic and reads as out-of-focus rather than as fast. |
+
+No two adjacent transitions share an axis or a mechanism.
+
+## Details that sell it
+
+- **Chromatic aberration is real channel separation** — the subtree rendered twice
+  through `feColorMatrix` red-only and cyan-only isolators, offset opposite ways,
+  recombined with `mix-blend-mode: screen`. That reconstructs losslessly at zero
+  offset, so it vanishes cleanly instead of leaving a colour cast. Two copies, and
+  only while a swipe is happening.
+- **The hook line morphs into the input field** rather than cross-fading — it
+  scales 68px → 30px and travels onto the field's line, so the sentence becomes
+  the control you're about to use.
+- **Brand colour wash** — a 4-frame 10% flash on the frames transitions land.
+- **The crumb hands over out-then-in, never overlapping.** Cross-dissolving two
+  different strings on top of each other renders as illegible mush.
+
+## Things worth knowing if you edit it
+
+- **Incoming pages must be populated before their transition lands.** A page whose
+  content starts at its own `from` frame renders as an empty blur for the whole
+  transition. Every page here starts its content during the approach.
+- **Swipe easing is calibrated, not guessed.** A hard ease-out like
+  `(0.16, 1, 0.3, 1)` is 93% complete at the halfway frame — the visible motion is
+  over in five frames and the rest of the window is a blurred still. The curve
+  used spreads travel across the window and keeps the deceleration at the end.
+- **Blur is 12px, not the reference's 20.** That figure was for a 1400px screen
+  inset in a 1920 frame; full-bleed over sparse dark UI, 20px stops being a smear
+  and just fogs the page.
+- **`SEND_FRAME` fires before the swipe window opens**, not during it — the send
+  causes the transition, so it has to precede it.
+
+## Sound
+
+Diegetic first — this is an app, not a film, so the transitions get UI whooshes
+rather than cinema impacts. Frame-exact sheet in `src/desk/audio/cues.ts`, off by
+default; drop files into `public/audio/` and set `<AudioDesign enabled />`.

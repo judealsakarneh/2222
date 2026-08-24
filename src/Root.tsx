@@ -4,6 +4,8 @@ import {DemoReel} from './DemoReel';
 import {RambleAd} from './RambleAd';
 import {ZambleTeaser} from './ZambleTeaser';
 import {LongTake} from './LongTake';
+import {ScreenCut} from './ScreenCut';
+import {DURATION as SCREENCUT_DURATION} from './desk/lib/timeline';
 import {DURATION as TEASER_DURATION} from './teaser/lib/timeline';
 import {DURATION as LONGTAKE_DURATION} from './longtake/lib/camera';
 import {TOTAL_DURATION_IN_FRAMES} from './lib/sceneTimings';
@@ -12,6 +14,16 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* zamble — "Screen Cut". 16:9 screen content, five transition mechanics. 16.0s. */}
+      <Composition
+        id="ScreenCut"
+        component={ScreenCut}
+        durationInFrames={SCREENCUT_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
       {/* zamble — "The Long Take". One unbroken 3D camera move. 30.0s at 30fps. */}
       <Composition
         id="LongTake"
