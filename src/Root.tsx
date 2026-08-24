@@ -3,13 +3,25 @@ import {Composition} from 'remotion';
 import {DemoReel} from './DemoReel';
 import {RambleAd} from './RambleAd';
 import {ZambleTeaser} from './ZambleTeaser';
+import {LongTake} from './LongTake';
 import {DURATION as TEASER_DURATION} from './teaser/lib/timeline';
+import {DURATION as LONGTAKE_DURATION} from './longtake/lib/camera';
 import {TOTAL_DURATION_IN_FRAMES} from './lib/sceneTimings';
 import './style.css';
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* zamble — "The Long Take". One unbroken 3D camera move. 30.0s at 30fps. */}
+      <Composition
+        id="LongTake"
+        component={LongTake}
+        durationInFrames={LONGTAKE_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+
       {/* zamble — 9:16 cyberpunk/glitch v2 teaser. 12.0s at 30fps. */}
       <Composition
         id="ZambleTeaser"

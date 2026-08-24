@@ -5,6 +5,7 @@ AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `LongTake` | 1080×1920 @ 30fps | 900 frames / 30.0s | zamble product film in one unbroken camera move |
 | `ZambleTeaser` | 1080×1920 @ 30fps | 360 frames / 12.0s | Cyberpunk glitch teaser for zamble v2 |
 | `RambleAd` | 1080×1920 @ 30fps | 600 frames / 20.0s | The ramble. product film, for Reels / TikTok |
 | `AEDemoReel` | 1080×1080 @ 30fps | 450 frames / 15.0s | Square reel of six After Effects style animations |
@@ -24,6 +25,7 @@ npm start          # Remotion Studio — scrub the whole timeline
 ## Render
 
 ```bash
+npm run build:long   # LongTake     -> out/zamble-longtake.mp4
 npm run build:teaser # ZambleTeaser -> out/zamble-teaser.mp4
 npm run build        # RambleAd     -> out/ramble.mp4
 npm run build:reel   # AEDemoReel   -> out/demo-reel.mp4
@@ -281,3 +283,110 @@ hit should be built from, because a single tone always sounds cheap.
 Off by default so the project renders on a clean checkout. To enable: drop files
 into `public/audio/` using the names in `cues.ts`, then change `<AudioDesign />`
 to `<AudioDesign enabled />` in `ZambleTeaser.tsx`.
+
+---
+
+# The Long Take
+
+Thirty seconds, eight ideas, **zero cuts**. The whole film is one unbroken camera
+move through a single 3D world, flying *through* eight stations that sit at fixed
+depths along the Z axis.
+
+## The architecture
+
+Everything on screen is derived from one continuous quantity — the camera
+position `cameraZ(frame)` in `longtake/lib/camera.ts` — or from its derivative:
+
+| Effect | Derived from |
+| --- | --- |
+| which station is visible | depth relative to camera |
+| depth of field (blur) | depth relative to camera |
+| atmospheric fade | depth relative to camera |
+| particle positions | depth relative to camera |
+| speed streaks | camera velocity |
+| lens fringing | camera velocity |
+| exposure lift | camera velocity |
+
+That coupling is the entire reason the piece feels smooth. It is not a set of
+animations timed to agree with each other — it is one move, and everything else
+is a consequence of it. There is nothing that *can* fall out of sync.
+
+**The camera never stops.** At each station it decelerates into a slow forward
+drift while you read, then accelerates away. A camera that halts completely is
+just a cut with extra steps — and the final frame is still drifting.
+
+## Structure
+
+```
+src/
+  LongTake.tsx                layer stack + the world rig
+
+  longtake/lib/
+    camera.ts                 THE camera curve, station depths, depth response
+    tokens.ts                 palette, brand, easing
+
+  longtake/components/
+    Station.tsx               places a station in world Z, applies depth response
+    ParticleField.tsx         the 3D field the camera flies through
+    SpeedFx.tsx               velocity-driven streaks + lens fringing
+    Caption.tsx               word-staggered line with per-word Z parallax
+
+  longtake/stations/
+    StHook.tsx        arr 000  "Everyone has the idea."
+    StVoice.tsx       arr 105  radial waveform aperture
+    StTranscript.tsx  arr 230  typing + entities lifting into chips
+    StResearch.tsx    arr 355  source graph wires itself up
+    StOutline.tsx     arr 500  six slide titles rule themselves in
+    StDeck.tsx        arr 630  fourteen slides as a breathing 3D wall
+    StMetric.tsx      arr 745  a bar collapsing to 2.4% of its width
+    StCta.tsx         arr 855  mark draws, button lands, still drifting
+
+  longtake/audio/
+    cues.ts                   frame-exact cue sheet, no stingers by design
+    AudioDesign.tsx           wires cues to files (off by default)
+```
+
+## Palette
+
+The world is cold data; the brand is the one warm signal in it. Emerald appears
+only at product moments, so it carries meaning rather than being decoration.
+
+| Token | Value | Role |
+| --- | --- | --- |
+| `void` | `#04060A` | deep space |
+| `mist` | `#6E8CA0` | secondary text, cold |
+| `ice` | `#A8D8F0` | the data colour |
+| `signal` | `#17E8A8` | BRAND — used sparingly |
+| `text` | `#EDF3F7` | headlines |
+
+## Things worth knowing if you edit it
+
+- **Stations enter view 125-160 frames before arrival**, not 40. Content is timed
+  to *assemble during the approach* and be complete on arrival, with one payoff
+  beat saved for the hold. If you retime a station, check it against
+  `depthOpacity` or it will be visibly empty as it comes into view.
+- **Peak camera velocity is ~247 units/frame**, so `speedNorm` normalises against
+  180. Normalising against a guessed value saturates the streaks flat across
+  every travel and throws away the dynamics the camera curve is producing.
+- **Any station wanting internal depth must establish its own `perspective`.**
+  `Station` sets `opacity`, which forces `transform-style: flat` on everything
+  below it — without a local perspective, `StDeck`'s per-card Z collapses and the
+  wall becomes a flat grid.
+- **The research constellation is re-centred on its node centroid.** A jittered
+  golden-angle spiral is not symmetric about its origin, so without that it hangs
+  off to one side of frame.
+- **Particles recycle by lap, not by mutation.** Remotion renders frames out of
+  order, so a particle's depth is derived by wrapping the camera position into a
+  repeating slab, and its lap number reseeds its x/y — a recycled particle comes
+  back as a genuinely different one, deterministically.
+- **Rebranding is one line**: `BRAND` in `longtake/lib/tokens.ts`.
+
+## Sound
+
+No stingers — there are no cuts, so a hard impact anywhere would imply an edit
+that does not exist. Instead: one continuous pad whose low-pass cutoff is
+automated to `speedNorm(frame)` (closed at stations, open mid-travel), plus soft
+arrival blooms and travel swells. That single automation does more for the feel
+than any individual cue. Frame-exact sheet in `src/longtake/audio/cues.ts`.
+
+Off by default. Drop files into `public/audio/` and set `<AudioDesign enabled />`.
