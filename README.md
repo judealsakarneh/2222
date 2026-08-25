@@ -5,6 +5,7 @@ AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `ZambleDemo` | 1920×1080 → **4K at `--scale=2`** @ 30fps | 540 frames / 18.0s | SaaS product demo, built to a millisecond spec |
 | `ZambleQuad` | 1080×1920 @ 30fps | 360 frames / 12.0s | Four locked panels at once — **seamless loop** |
 | `ZambleStory` | 1920×1080 @ 30fps | 690 frames / 23.0s | Night/paper worlds, shape-driven transitions — the slow cut |
 | `ScreenCut` | 1920×1080 @ 30fps | 480 frames / 16.0s | Screen content — five transition mechanics inside one app shell |
@@ -28,6 +29,7 @@ npm start          # Remotion Studio — scrub the whole timeline
 ## Render
 
 ```bash
+npm run build:demo   # ZambleDemo   -> out/zamble-demo-4k.mp4  (3840x2160)
 npm run build:quad   # ZambleQuad   -> out/zamble-quad.mp4
 npm run build:story  # ZambleStory  -> out/zamble-story.mp4
 npm run build:screen # ScreenCut    -> out/zamble-screencut.mp4
@@ -590,3 +592,68 @@ of code less and would instantly read as a slideshow.
 
 Every motion uses `cubic-bezier(0.22, 1, 0.36, 1)`. Nothing linear, nothing
 robotic. All nine slide glyphs are hand-authored SVG — no icon library.
+
+---
+
+# Demo
+
+An 18-second SaaS product demo, built to a millisecond-level brief.
+
+| Time | Section |
+| --- | --- |
+| 0.0–2.0 | **Logo reveal** — 400ms of black, then the wordmark opens out of −10px tracking and overshoots to 102% at 1400ms |
+| 2.0–6.0 | **Dashboard** — panel rises with motion blur, "Hello,"/"Mark" on a 150ms stagger, counter 0→86% while the ring draws to 309.6°, chart strokes L→R over 1200ms |
+| 6.0–9.0 | **New Updates** — two concentric rings pulsing 1 → 1.3 → 1 on a 1200ms cycle |
+| 9.0–13.0 | **AI Agent** — the centrepiece; container overshoots to 105%, message types at 70ms/char, three dots loop |
+| 13.0–18.0 | **Carousel + CTA** — chat slides out, three cards turn a full 360° in an 800px perspective, logo and CTA land |
+
+## Resolution: authored at 1080p, rendered at 2×
+
+The brief's measurements — 120px logo, 48px greeting, 640×400 chat window, 60/90px
+ring radii — are all written for a 1080p mental model. Typing them into a
+3840-wide canvas renders every element at half the intended size. So the
+composition is authored at 1920×1080 and rendered with `--scale=2`, which gives a
+true 3840×2160 file with the spec's proportions intact **and** keeps the numbers
+in the code diffable against the numbers in the brief.
+
+## Spec fidelity
+
+Every cue lives in `demo/lib/timeline.ts` as the brief's millisecond value passed
+through an `ms()` helper, rather than as hand-converted frame numbers — so the
+code and the brief can be read side by side.
+
+Two places where the spec's literal value needed care:
+
+- **70ms/char is 2.1 frames, deliberately not rounded to 2.** Rounding drifts the
+  message's finish by ~4 frames over 45 characters and desyncs it from the
+  thinking dots.
+- **Section overlap** is implemented in `SceneLayer`: each section starts 200ms
+  before the previous ends, and the outgoing one scales to 60% at 40% opacity as
+  it goes. Section 4 is the exception — the chat window is carried out of frame
+  by section 5's slide rather than scaling down in place, so the two share one
+  continuous move.
+
+## The carousel took three attempts
+
+Worth recording, because each failure looked like a different bug:
+
+1. **Front card magnified 2.1×.** At radius 420 with the ring centred on the
+   screen plane, an 800px perspective magnifies the front card by
+   `800/(800−420)` and it fills the frame. Fixed by pushing the whole ring back
+   to z −450, putting the front card at −150 (0.84×) and the rear pair at −600.
+2. **Back-facing cards showed mirrored text.** The obvious fix is
+   `backface-visibility: hidden`.
+3. **Which then made the frame go completely empty mid-spin.** With only three
+   cards 120° apart, culling means there are stretches of the 360° rotation where
+   all three are turned away.
+
+The resolution: **don't cull.** Panels always render; the *text* is what fades
+out before a card turns far enough to mirror. Three cards 120° apart guarantee at
+least one is always at `facing >= 0.75`, so a readable card is never absent
+either.
+
+## Palette
+
+The brief calls for neon blue + purple. Swapped for our emerald as the single
+neon, everything else held neutral — one saturated colour on near-black is what
+reads as Apple/Linear rather than as a gamer product.

@@ -7,6 +7,8 @@ import {LongTake} from './LongTake';
 import {ScreenCut} from './ScreenCut';
 import {ZambleStory} from './ZambleStory';
 import {ZambleQuad} from './ZambleQuad';
+import {ZambleDemo} from './ZambleDemo';
+import {DURATION as DEMO_DURATION} from './demo/lib/timeline';
 import {DURATION as STORY_DURATION} from './story/lib/timeline';
 import {DURATION as SCREENCUT_DURATION} from './desk/lib/timeline';
 import {DURATION as TEASER_DURATION} from './teaser/lib/timeline';
@@ -17,6 +19,17 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* zamble — "Demo". SaaS product demo, millisecond-spec. Authored 1080p,
+          render with --scale=2 for the spec's 3840x2160. 18.0s. */}
+      <Composition
+        id="ZambleDemo"
+        component={ZambleDemo}
+        durationInFrames={DEMO_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
       {/* zamble — "Quad". Four locked panels, seamless 12.0s loop. */}
       <Composition
         id="ZambleQuad"
