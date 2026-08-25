@@ -5,6 +5,7 @@ AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `ZambleQuad` | 1080×1920 @ 30fps | 360 frames / 12.0s | Four locked panels at once — **seamless loop** |
 | `ZambleStory` | 1920×1080 @ 30fps | 690 frames / 23.0s | Night/paper worlds, shape-driven transitions — the slow cut |
 | `ScreenCut` | 1920×1080 @ 30fps | 480 frames / 16.0s | Screen content — five transition mechanics inside one app shell |
 | `LongTake` | 1080×1920 @ 30fps | 900 frames / 30.0s | zamble product film in one unbroken camera move |
@@ -27,6 +28,7 @@ npm start          # Remotion Studio — scrub the whole timeline
 ## Render
 
 ```bash
+npm run build:quad   # ZambleQuad   -> out/zamble-quad.mp4
 npm run build:story  # ZambleStory  -> out/zamble-story.mp4
 npm run build:screen # ScreenCut    -> out/zamble-screencut.mp4
 npm run build:long   # LongTake     -> out/zamble-longtake.mp4
@@ -540,3 +542,51 @@ over and the handover is invisible.
 - **Transition length is the readability lever.** 24 frames is the floor for a
   mechanic the eye can actually follow; below ~18 it registers as "something
   happened" rather than as a move.
+
+---
+
+# Quad
+
+Four panels stacked in one locked frame, all running at once. No camera moves, no
+transitions, no scene changes — every bit of motion happens inside the frame. The
+format shows four capabilities in the time it takes to show one.
+
+| Panel | Content |
+| --- | --- |
+| 1 | **Just talk.** — live level meter |
+| 2 | **zamble** — the mark drawing and un-drawing itself |
+| 3 | the prompt bar — three phrases, typed and erased, never cut |
+| 4 | **Any idea. / Any deck.** — nine slide types on a 100ms stagger |
+
+## The loop is the flex
+
+Frame 359 hands to frame 0 with no visible seam, so it can be posted as an
+infinite loop. That is not free — it dictated every timing decision in the film:
+
+- the level meter's two sine terms use periods of **90 and 120 frames**, both
+  divisors of 360, so the waveform is continuous across the seam
+- the mark **retracts back along its own path** instead of cutting or fading, so
+  both ends of the loop are an empty canvas — and it reads as intentional, the
+  tangle resolving over and over
+- the mark's blink (**72**) and breath (**120**) cycles are divisors too — hence
+  the `blinkCycle` / `breathCycle` props on `ZambleMark`
+- the prompt bar runs three phrases on exactly **120 frames** each
+- the icon grid staggers in, breathes on a **90-frame** cycle, and staggers back
+  out before the end
+
+**Nothing may fade in from frame 0.** Anything that does is absent at 0 and
+present at 359, and pops at the seam. A loop has no beginning — Panel 1's caption
+is simply always on.
+
+## Two details carried from the reference
+
+**The 100ms stagger.** Nine icons appearing together looks like a static asset;
+nine arriving 3 frames apart looks authored. It is the cheapest possible upgrade
+to perceived craft.
+
+**The phrase swap never cuts.** Each prompt types in, holds, then *erases*
+character by character before the next begins. Cutting the text would be one line
+of code less and would instantly read as a slideshow.
+
+Every motion uses `cubic-bezier(0.22, 1, 0.36, 1)`. Nothing linear, nothing
+robotic. All nine slide glyphs are hand-authored SVG — no icon library.

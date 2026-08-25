@@ -52,7 +52,19 @@ export const ZambleMark: React.FC<{
   strokeWidth?: number;
   /** Set false for a static logo lockup. */
   alive?: boolean;
-}> = ({progress, width = 760, color = D.signal, strokeWidth = 11, alive = true}) => {
+  /** Frames per blink cycle. Pick a divisor of the composition length to loop. */
+  blinkCycle?: number;
+  /** Frames per breath cycle. Same rule. */
+  breathCycle?: number;
+}> = ({
+  progress,
+  width = 760,
+  color = D.signal,
+  strokeWidth = 11,
+  alive = true,
+  blinkCycle = 76,
+  breathCycle = 240,
+}) => {
   const frame = useCurrentFrame();
 
   const eyes = interpolate(progress, [EYES_AT, EYES_AT + 0.14], [0, 1], {
@@ -63,12 +75,14 @@ export const ZambleMark: React.FC<{
 
   // Blink: 4 frames closed on a 76-frame cycle, with a second quick blink
   // offset inside it so the rhythm isn't metronomic.
-  const t = frame % 76;
+  const t = frame % blinkCycle;
   const blinking = alive && (t < 4 || (t > 9 && t < 12));
   const lidScale = blinking ? 0.12 : 1;
 
   // The tangle keeps a tiny breath so the character never freezes solid.
-  const breath = alive ? 1 + Math.sin(frame / 38) * 0.012 : 1;
+  const breath = alive
+    ? 1 + Math.sin((frame / breathCycle) * Math.PI * 2) * 0.012
+    : 1;
 
   return (
     <svg

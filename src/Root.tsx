@@ -6,6 +6,7 @@ import {ZambleTeaser} from './ZambleTeaser';
 import {LongTake} from './LongTake';
 import {ScreenCut} from './ScreenCut';
 import {ZambleStory} from './ZambleStory';
+import {ZambleQuad} from './ZambleQuad';
 import {DURATION as STORY_DURATION} from './story/lib/timeline';
 import {DURATION as SCREENCUT_DURATION} from './desk/lib/timeline';
 import {DURATION as TEASER_DURATION} from './teaser/lib/timeline';
@@ -16,6 +17,16 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* zamble — "Quad". Four locked panels, seamless 12.0s loop. */}
+      <Composition
+        id="ZambleQuad"
+        component={ZambleQuad}
+        durationInFrames={360}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+
       {/* zamble — "Story". Night/paper worlds, shape-driven transitions. 23.0s. */}
       <Composition
         id="ZambleStory"
