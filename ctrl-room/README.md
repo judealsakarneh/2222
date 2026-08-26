@@ -8,7 +8,15 @@ mark on the page is drawn in this repo.
 npm install
 npm run dev      # http://localhost:3000
 npm run build && npm start
+
+npm run preview  # bundle the whole site into ONE self-contained .html
 ```
+
+`npm run preview` writes `preview/out/ctrl-room.html` — the same components,
+rendered through esbuild with the CSS and JS inlined, so the file can be opened
+from anywhere with no server. Useful for sending the site to a phone or
+publishing it somewhere that only takes a single file. It renders the real
+components, not a copy, so it cannot drift from the site.
 
 ## The rules the design runs on
 
