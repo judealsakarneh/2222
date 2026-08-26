@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * ctrl ROOM — base layer.
+ *
+ * Everything here is a material property of the brand surface: the near-black
+ * floor, the film grain that keeps it from reading as flat #000 on an OLED
+ * phone, and the emboss/deboss recipes used for the foil-stamped wordmark.
+ * Component files stay clean of this because it is all one-time setup.
+ */
+
+:root {
+  --ink: #0a0a0a;
+  --teal: #2dd4bf;
+  /* Section rhythm. Every vertical gap on the page is one of these two so the
+     page has a measure rather than a pile of arbitrary paddings. */
+  --gap-section: clamp(5.5rem, 11vw, 9.5rem);
+  --gap-block: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* iOS overscroll should show the page floor, not white. */
+    background-color: var(--ink);
+  }
+
+  body {
+    background-color: var(--ink);
+    color: rgba(255, 255, 255, 0.7);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'ss01', 'cv05';
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(45, 212, 191, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--teal);
+    outline-offset: 3px;
+  }
+
+  /* Respect the system setting. Every reveal in this site is a transform plus
+     opacity, so cutting duration to near zero leaves the layout identical. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /**
+   * FOIL-STAMPED WORDMARK.
+   * A real deboss is two offset copies of the same shape: a dark edge on the
+   * light side and a light edge on the dark side. Text-shadow gives us exactly
+   * that for free, and because the fill is transparent the letterform only
+   * exists as those two edges — which is what makes it read as pressed into the
+   * surface rather than printed on top of it.
+   */
+  .deboss {
+    color: transparent;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.055),
+      0 -1px 0 rgba(0, 0, 0, 0.85);
+  }
+
+  /* The raised counterpart: light above, shadow below. Used on the card face. */
+  .emboss {
+    color: rgba(255, 255, 255, 0.028);
+    text-shadow:
+      0 -1px 0 rgba(0, 0, 0, 0.7),
+      0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* Hairline that fades at both ends instead of stopping dead. Used for every
+     horizontal rule on the page — a full-width solid line is the single fastest
+     way to make a dark layout look like a template. */
+  .rule-fade {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1) 18%,
+      rgba(255, 255, 255, 0.1) 82%,
+      transparent
+    );
+  }
+
+  /* Nav / footer link with a teal underline that grows from the left. */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 1px;
+    width: 100%;
+    background: var(--teal);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@layer utilities {
+  /**
+   * GRAIN. An inline SVG feTurbulence, so there is no image request and no
+   * chance of a missing asset. At 0.035 opacity it is invisible as texture but
+   * it breaks up the flat fields — without it, large near-black areas band
+   * badly on 8-bit displays.
+   */
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Text that sits on the teal accent gradient. Used once, on the headline. */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Kill the tilt maths on touch devices — there is no pointer to track. */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+}

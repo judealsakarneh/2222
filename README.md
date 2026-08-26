@@ -3,6 +3,10 @@
 Remotion compositions, everything drawn in code. No images, no video assets, no
 AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
+> There is also a **web** project in this repo: [`ctrl-room/`](./ctrl-room) — the
+> Next.js landing site for the ctrl ROOM loyalty card. It has its own README and
+> its own `package.json`; nothing below applies to it.
+
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
 | `ZambleDemo` | 1920×1080 → **4K at `--scale=2`** @ 30fps | 540 frames / 18.0s | SaaS product demo, built to a millisecond spec |
