@@ -8,6 +8,8 @@ import {ScreenCut} from './ScreenCut';
 import {ZambleStory} from './ZambleStory';
 import {ZambleQuad} from './ZambleQuad';
 import {ZambleDemo} from './ZambleDemo';
+import {CtrlPromo} from './CtrlPromo';
+import {DURATION as CTRL_DURATION} from './ctrl/lib/tokens';
 import {DURATION as DEMO_DURATION} from './demo/lib/timeline';
 import {DURATION as STORY_DURATION} from './story/lib/timeline';
 import {DURATION as SCREENCUT_DURATION} from './desk/lib/timeline';
@@ -19,6 +21,16 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* CTRL Room — "Jordan, switched on." 9:16 brand film for Reels. 24.0s. */}
+      <Composition
+        id="CtrlPromo"
+        component={CtrlPromo}
+        durationInFrames={CTRL_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+
       {/* zamble — "Demo". SaaS product demo, millisecond-spec. Authored 1080p,
           render with --scale=2 for the spec's 3840x2160. 18.0s. */}
       <Composition

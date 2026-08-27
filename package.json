@@ -16,7 +16,8 @@
     "build:screen": "remotion render src/index.ts ScreenCut out/zamble-screencut.mp4",
     "build:story": "remotion render src/index.ts ZambleStory out/zamble-story.mp4",
     "build:quad": "remotion render src/index.ts ZambleQuad out/zamble-quad.mp4",
-    "build:demo": "remotion render src/index.ts ZambleDemo out/zamble-demo-4k.mp4 --scale=2"
+    "build:demo": "remotion render src/index.ts ZambleDemo out/zamble-demo-4k.mp4 --scale=2",
+    "build:ctrl": "remotion render src/index.ts CtrlPromo out/ctrl-room-promo.mp4 --codec=h264 --crf=18"
   },
   "dependencies": {
     "@remotion/cli": "4.0.516",

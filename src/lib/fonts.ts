@@ -1,3 +1,5 @@
+import {loadFont as loadArchivo} from '@remotion/google-fonts/Archivo';
+import {loadFont as loadJetBrains} from '@remotion/google-fonts/JetBrainsMono';
 import {loadFont as loadInter} from '@remotion/google-fonts/Inter';
 import {loadFont as loadInstrumentSerif} from '@remotion/google-fonts/InstrumentSerif';
 
@@ -21,3 +23,17 @@ export const {fontFamily: SERIF} = loadInstrumentSerif('normal', {
   subsets: ['latin'],
 });
 loadInstrumentSerif('italic', {weights: ['400'], subsets: ['latin']});
+
+
+// CTRL Room brand faces. Archivo carries display and body; JetBrains Mono
+// carries every label, index and readout — the instrumentation layer that makes
+// the piece read like the control room the brand is named after.
+export const {fontFamily: ARCHIVO} = loadArchivo('normal', {
+  weights: ['400', '500', '700', '800', '900'],
+  subsets: ['latin'],
+});
+
+export const {fontFamily: MONO} = loadJetBrains('normal', {
+  weights: ['400', '500'],
+  subsets: ['latin'],
+});

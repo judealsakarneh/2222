@@ -9,6 +9,7 @@ AI generation — every pixel is React, SVG, CSS and frame-driven maths.
 
 | Composition | Format | Length | What it is |
 | --- | --- | --- | --- |
+| `CtrlPromo` | 1080×1920 @ 30fps | 720 frames / 24.0s | **CTRL Room brand film** — "Jordan, switched on." Vertical, for Reels |
 | `ZambleDemo` | 1920×1080 → **4K at `--scale=2`** @ 30fps | 540 frames / 18.0s | SaaS product demo, built to a millisecond spec |
 | `ZambleQuad` | 1080×1920 @ 30fps | 360 frames / 12.0s | Four locked panels at once — **seamless loop** |
 | `ZambleStory` | 1920×1080 @ 30fps | 690 frames / 23.0s | Night/paper worlds, shape-driven transitions — the slow cut |
