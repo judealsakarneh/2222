@@ -32,13 +32,14 @@ export function Rewards() {
       <div className="mx-auto max-w-content px-6 sm:px-8">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHead
+            index="03"
             label="Rewards"
             title="Worth carrying. Worth using."
           />
           <Reveal delay={0.12} className="hidden lg:block">
             <span className="inline-flex items-center gap-3 text-chalk-35">
               <IconSignal size={20} />
-              <span className="text-[12px] tracking-[0.2em]">TAP TO REDEEM</span>
+              <span className="label">Tap to redeem</span>
             </span>
           </Reveal>
         </div>
@@ -53,7 +54,7 @@ export function Rewards() {
               className={span ? 'sm:col-span-2' : undefined}
             >
               <article
-                className={`group relative h-full overflow-hidden rounded-2xl border border-white/[0.06] bg-ink-900 p-7 transition-colors duration-500 hover:border-white/[0.12] sm:p-8 ${
+                className={`group relative h-full overflow-hidden rounded-2xl border border-white/[0.06] bg-ink-900 p-7 transition-colors duration-500 hover:border-white/[0.13] sm:p-8 ${
                   span ? 'lg:p-10' : ''
                 }`}
               >
@@ -73,8 +74,8 @@ export function Rewards() {
                     className="text-teal opacity-70 transition-opacity duration-500 group-hover:opacity-100"
                   />
                   <h3
-                    className={`mt-6 font-semibold tracking-tight text-white ${
-                      span ? 'text-[22px] sm:text-[26px]' : 'text-[17px]'
+                    className={`mt-6 font-bold tracking-tight text-white ${
+                      span ? 'text-[24px] sm:text-[30px]' : 'text-[18px]'
                     }`}
                   >
                     {title}
@@ -104,7 +105,7 @@ export function Rewards() {
                 }}
               />
               <div className="relative">
-                <h3 className="mx-auto max-w-[16ch] text-balance text-[clamp(1.7rem,4vw,2.4rem)] font-bold leading-[1.08] tracking-headline text-white">
+                <h3 className="mx-auto max-w-[16ch] text-balance text-[clamp(1.9rem,4.6vw,2.9rem)] font-bold leading-[1.05] tracking-display text-white">
                   Get your card. Start tapping.
                 </h3>
                 <p className="mx-auto mt-4 max-w-[38ch] text-[15.5px] leading-[1.7] text-chalk-50">

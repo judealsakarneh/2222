@@ -14,8 +14,10 @@ import {CardPreview} from '../components/CardPreview';
 import {Footer} from '../components/Footer';
 import {Hero} from '../components/Hero';
 import {HowItWorks} from '../components/HowItWorks';
+import {Marquee} from '../components/Marquee';
 import {Nav} from '../components/Nav';
 import {Rewards} from '../components/Rewards';
+import {Statement} from '../components/Statement';
 
 function Site() {
   return (
@@ -23,6 +25,8 @@ function Site() {
       <Nav />
       <main>
         <Hero />
+        <Marquee />
+        <Statement />
         <HowItWorks />
         <CardPreview />
         <Rewards />

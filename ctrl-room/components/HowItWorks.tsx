@@ -8,47 +8,56 @@ const STEPS = [
     title: 'Earn Points',
     Icon: IconEarn,
     body: 'Tap your card at the counter. Points land before your receipt prints — no codes, no phone number, no app to open.',
+    tags: ['Contactless tap', 'Instant balance', 'No receipt scan'],
   },
   {
     n: '02',
     title: 'Get Rewards',
     Icon: IconReward,
     body: 'Points turn into something worth having. Free rounds, early access, a table held for you on a Friday night.',
+    tags: ['Auto-applied', 'No expiry', 'Room-specific perks'],
   },
   {
     n: '03',
     title: 'Enjoy More',
     Icon: IconEnjoy,
     body: 'The more rooms you visit, the better it gets. Your tier follows you across every place that carries the card.',
+    tags: ['Tiers that travel', 'Network-wide'],
   },
 ];
 
 /**
- * The three steps share one hairline rail with a diamond node on each. On
- * desktop the rail is horizontal and runs behind the row; on mobile it becomes
- * a vertical spine down the left. Same idea, one component, no duplicated
- * markup — the rail is drawn per-item as a pseudo-element rather than as a
- * single line, which is what lets it change axis without a second layout.
+ * Three panels, each ending in a row of chips.
+ *
+ * The chips are not decoration — they are the specifics the body copy cannot
+ * carry without turning into a paragraph. A prospect skimming the page reads
+ * the heading and the chips and has the whole feature set; a prospect who
+ * stops reads the body. Both are served by the same panel.
+ *
+ * `mt-auto` on the chip row pins it to the bottom of every panel regardless of
+ * how long its body runs, so the three bottom edges line up. Without it the
+ * chips float at three different heights and the row looks unset.
  */
 export function HowItWorks() {
   return (
     <section
       id="how"
-      className="relative border-t border-white/[0.05] py-[var(--gap-section)]"
+      className="relative py-[var(--gap-section)]"
     >
       <div className="mx-auto max-w-content px-6 sm:px-8">
         <SectionHead
+          index="01"
           label="How it works"
           title="Three taps. That is the whole system."
           body="No punch cards, no stamps, no barcode screenshots. One card that knows where you have been and what you are owed."
         />
 
         <RevealGroup
-          className="mt-[var(--gap-block)] grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.05] sm:grid-cols-3"
+          className="mt-[var(--gap-block)] grid grid-cols-1 gap-3 sm:grid-cols-3"
           stagger={0.11}
         >
-          {STEPS.map(({n, title, body, Icon}) => (
-            <RevealItem key={n} className="group relative bg-ink-950">
+          {STEPS.map(({n, title, body, Icon, tags}) => (
+            <RevealItem key={n} className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-ink-900 transition-colors duration-500 hover:border-white/[0.13]">
               {/* The teal wash only appears on hover, and only on the panel the
                   pointer is over — the one moment the accent is allowed to
                   cover an area rather than a detail. */}
@@ -62,26 +71,29 @@ export function HowItWorks() {
               <div className="relative flex h-full flex-col p-7 sm:p-8 lg:p-10">
                 <div className="flex items-center justify-between">
                   <Icon
-                    size={26}
+                    size={30}
                     className="text-white/80 transition-colors duration-500 group-hover:text-white"
                   />
-                  <span className="text-[11px] font-medium tracking-[0.22em] text-chalk-35">
-                    {n}
-                  </span>
+                  <span className="label nums text-chalk-20">{n}</span>
                 </div>
 
-                <h3 className="mt-8 text-[19px] font-semibold tracking-tight text-white">
+                <h3 className="mt-8 text-[21px] font-bold tracking-tight text-white">
                   {title}
                 </h3>
                 <p className="mt-3.5 text-[14.5px] leading-[1.7] text-chalk-50">
                   {body}
                 </p>
 
-                {/* Teal rule that grows on hover — the panel's only reaction. */}
-                <span
-                  className="mt-8 block h-px w-8 origin-left scale-x-100 bg-teal/60 transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-[2.6]"
-                  aria-hidden="true"
-                />
+                <ul className="mt-auto flex flex-wrap gap-2 pt-9">
+                  {tags.map((t) => (
+                    <li
+                      key={t}
+                      className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11.5px] font-medium tracking-tight text-chalk-50 transition-colors duration-500 group-hover:border-white/[0.14] group-hover:text-chalk-70"
+                    >
+                      {t}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </RevealItem>
           ))}

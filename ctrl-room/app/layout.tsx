@@ -1,17 +1,22 @@
 import type {Metadata, Viewport} from 'next';
-import {Inter} from 'next/font/google';
+import {Inter, JetBrains_Mono} from 'next/font/google';
 import './globals.css';
 
 /**
- * Inter, loaded through next/font so it is self-hosted at build time — no
- * render-blocking request to a font CDN, and no flash of a fallback face on a
- * phone connection. `display: swap` plus an explicit adjustFontFallback keeps
- * the pre-swap layout close enough that nothing jumps.
+ * Both faces self-hosted at build time through next/font — no render-blocking
+ * CDN request, and no flash of a fallback on a phone connection.
  */
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-sans',
+});
+
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500'],
+  variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
@@ -27,19 +32,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // Matches the page floor, so the iOS status bar and the address bar blend
-  // into the design instead of framing it in white.
   themeColor: '#0A0A0A',
   colorScheme: 'dark',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${mono.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

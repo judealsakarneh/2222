@@ -56,10 +56,10 @@ const html = `<title>ctrl ROOM</title>
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <style>
-:root { --font-sans: 'Inter'; }
+:root { --font-sans: 'Inter'; --font-mono: 'JetBrains Mono'; }
 html, body {
   background: #0A0A0A;
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;

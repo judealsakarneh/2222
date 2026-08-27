@@ -41,7 +41,7 @@ export function CardPreview() {
 
           <div className="mt-9 flex items-center justify-center gap-2.5 lg:justify-start">
             <IconTap size={16} className="text-teal" />
-            <span className="text-[12.5px] tracking-tight text-chalk-35">
+            <span className="label text-chalk-35">
               Move across the card to catch the light
             </span>
           </div>
@@ -49,6 +49,7 @@ export function CardPreview() {
 
         <div className="order-1 lg:order-2 lg:col-span-5">
           <SectionHead
+            index="02"
             label="The card"
             title="Built to be tapped, not explained."
           />

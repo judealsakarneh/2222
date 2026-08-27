@@ -14,10 +14,13 @@ export function Watermark({
   word = 'ctrl',
   className = '',
   meshId = 'page-mesh',
+  showWord = true,
 }: {
   word?: string;
   className?: string;
   meshId?: string;
+  /** Off wherever another large graphic already owns the background. */
+  showWord?: boolean;
 }) {
   return (
     <div
@@ -36,6 +39,8 @@ export function Watermark({
         <GlyphMesh id={meshId} opacity={0.016} scale={1.15} />
       </div>
 
+      {showWord ? (
+      <>
       {/* The press is masked to the left of the frame so it never crosses the
           card. Two near-black shapes overlapping — a debossed letterform and a
           product shot — cancel each other out; separating them lets both read. */}
@@ -67,6 +72,8 @@ export function Watermark({
           {word}
         </span>
       </div>
+      </>
+      ) : null}
     </div>
   );
 }
