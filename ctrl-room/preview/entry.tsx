@@ -1,35 +1,44 @@
 /**
  * Single-file preview entry.
  *
- * Renders exactly the same components the Next app renders — no forks, no
- * simplified copies — into one bundle that can be inlined in a standalone HTML
- * page. The only thing Next was providing that this has to replace is the font
- * variable, which the host page sets on :root.
- *
- * Kept out of the Next build by tsconfig/tailwind globs pointing at app/ and
- * components/ only, so this file can never affect the real site.
+ * Renders the same page components the Next app renders — no forks, no
+ * simplified copies. Next supplies two things a standalone file does not have:
+ * the font variables (set by hand on :root in the host page) and the router,
+ * which the shim in ./shim replaces so all six routes work inside one file.
  */
 import {createRoot} from 'react-dom/client';
-import {CardPreview} from '../components/CardPreview';
-import {Footer} from '../components/Footer';
-import {Hero} from '../components/Hero';
-import {HowItWorks} from '../components/HowItWorks';
-import {Marquee} from '../components/Marquee';
-import {Nav} from '../components/Nav';
-import {Rewards} from '../components/Rewards';
-import {Statement} from '../components/Statement';
+import {ActBackground} from '../components/site/ActBackground';
+import {Footer} from '../components/site/Footer';
+import {Header} from '../components/site/Header';
+import {usePathname} from './shim/router';
+
+import Home from '../app/page';
+import Membership from '../app/membership/page';
+import Business from '../app/business/page';
+import Events from '../app/events/page';
+import WorkplaceIndex from '../app/workplace-index/page';
+import About from '../app/about/page';
+
+const ROUTES: Record<string, () => JSX.Element> = {
+  '/': Home,
+  '/membership': Membership,
+  '/business': Business,
+  '/events': Events,
+  '/workplace-index': WorkplaceIndex,
+  '/about': About,
+};
 
 function Site() {
+  const path = usePathname();
+  const Page = ROUTES[path] ?? Home;
   return (
     <>
-      <Nav />
-      <main>
-        <Hero />
-        <Marquee />
-        <Statement />
-        <HowItWorks />
-        <CardPreview />
-        <Rewards />
+      <ActBackground />
+      <Header />
+      {/* Keyed so a route change remounts the page and every scroll-driven
+          value re-measures against the new document. */}
+      <main className="relative" key={path}>
+        <Page />
       </main>
       <Footer />
     </>

@@ -1,15 +1,21 @@
 import type {Metadata, Viewport} from 'next';
-import {Inter, JetBrains_Mono} from 'next/font/google';
+import {Archivo, JetBrains_Mono} from 'next/font/google';
 import './globals.css';
+import {Header} from '@/components/site/Header';
+import {Footer} from '@/components/site/Footer';
+import {ActBackground} from '@/components/site/ActBackground';
 
 /**
- * Both faces self-hosted at build time through next/font — no render-blocking
- * CDN request, and no flash of a fallback on a phone connection.
+ * Archivo carries display and body; its width axis is what lets the big
+ * headlines run expanded without a second family. JetBrains Mono carries every
+ * label, timestamp and readout — the instrumentation layer that makes the site
+ * read like the control room the brand is named after.
  */
-const inter = Inter({
+const display = Archivo({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-sans',
+  axes: ['wdth'],
+  variable: '--font-display',
 });
 
 const mono = JetBrains_Mono({
@@ -20,26 +26,34 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ctrl ROOM — Your place. Your rewards.',
+  title: {default: 'CTRL Room — Jordan, switched on.', template: '%s — CTRL Room'},
   description:
-    'A contactless loyalty card for the rooms you already call yours. Tap to earn points, tap to redeem rewards. No app, no punch card.',
+    "Jordan's discovery, community and commerce platform. What's happening, what's worth knowing, and the membership that gets you in.",
   openGraph: {
-    title: 'ctrl ROOM — Your place. Your rewards.',
+    title: 'CTRL Room — Jordan, switched on.',
     description:
-      'A contactless loyalty card for the rooms you already call yours.',
+      "Jordan's discovery, community and commerce platform.",
     type: 'website',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0A0A0A',
+  themeColor: '#0B0B0B',
   colorScheme: 'dark',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={`${inter.variable} ${mono.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="en" className={`${display.variable} ${mono.variable}`}>
+      <body className="font-sans antialiased">
+        {/* One fixed layer behind everything. Sections declare which act they
+            belong to and this crossfades between them as you scroll, so the
+            page changes temperature gradually instead of cutting. */}
+        <ActBackground />
+        <Header />
+        <main className="relative">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

@@ -36,6 +36,12 @@ await build({
   jsx: 'automatic',
   target: 'es2020',
   define: {'process.env.NODE_ENV': '"production"'},
+  // The page components import Next's router; in the standalone bundle those
+  // resolve to the shim, which is what makes all six routes work in one file.
+  alias: {
+    'next/link': resolve(root, 'preview/shim/link.tsx'),
+    'next/navigation': resolve(root, 'preview/shim/navigation.ts'),
+  },
   outfile: resolve(tmp, 'app.js'),
   logLevel: 'warning',
 });
@@ -51,20 +57,19 @@ const [css, js] = await Promise.all([
   readFile(resolve(tmp, 'app.js'), 'utf8'),
 ]);
 
-const html = `<title>ctrl ROOM</title>
+const html = `<title>CTRL Room</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <style>
-:root { --font-sans: 'Inter'; --font-mono: 'JetBrains Mono'; }
+:root { --font-display: 'Archivo'; --font-mono: 'JetBrains Mono'; }
 html, body {
-  background: #0A0A0A;
-  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #0B0B0B;
+  font-family: var(--font-display), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
-#root { background: #0A0A0A; }
 </style>
 
 <style>
