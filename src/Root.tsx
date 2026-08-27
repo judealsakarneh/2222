@@ -9,6 +9,8 @@ import {ZambleStory} from './ZambleStory';
 import {ZambleQuad} from './ZambleQuad';
 import {ZambleDemo} from './ZambleDemo';
 import {CtrlPromo} from './CtrlPromo';
+import {CtrlReel} from './CtrlReel';
+import {DURATION as REEL_DURATION} from './reel/tokens';
 import {DURATION as CTRL_DURATION} from './ctrl/lib/tokens';
 import {DURATION as DEMO_DURATION} from './demo/lib/timeline';
 import {DURATION as STORY_DURATION} from './story/lib/timeline';
@@ -21,6 +23,16 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* CTRL Room — 16:9 motion reel. 150 frames / 5.000s. */}
+      <Composition
+        id="CtrlReel"
+        component={CtrlReel}
+        durationInFrames={REEL_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
       {/* CTRL Room — "Jordan, switched on." 9:16 brand film for Reels. 24.0s. */}
       <Composition
         id="CtrlPromo"
