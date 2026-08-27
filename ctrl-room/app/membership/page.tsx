@@ -2,19 +2,20 @@ import type {Metadata} from 'next';
 import {CardStage} from '@/components/card/CardStage';
 import {Act, Wrap} from '@/components/site/Act';
 import {Masthead} from '@/components/site/Masthead';
-import {Action, Eyebrow, Lede, Reveal, Rows, Title} from '@/components/site/UI';
+import {Action, Lede, Reveal, Rows, Title} from '@/components/site/UI';
+import {DisplayHeadline} from '@/components/site/DisplayHeadline';
 
 export const metadata: Metadata = {
   title: 'Membership',
   description:
-    'CTRL Room Membership — discounts at restaurants, cafés, gyms and hotels, member-only events, early access and partner experiences across Jordan.',
+    'CTRL Room Membership: discounts at restaurants, cafés, gyms and hotels, member-only events, early access and partner experiences across Jordan.',
 };
 
 const PERKS = [
-  {n: '01', title: 'Restaurants & cafés', body: 'Standing discounts at partner venues across Amman, Aqaba and beyond — applied at the table, not claimed through an app.'},
+  {n: '01', title: 'Restaurants & cafés', body: 'Standing discounts at partner venues across Amman, Aqaba and beyond, applied at the table, not claimed through an app.'},
   {n: '02', title: 'Gyms & activities', body: 'Member rates on memberships, classes, courts and studios with partners across the country.'},
   {n: '03', title: 'Hotels & shopping', body: 'Weekend rates, retail offers and seasonal partner promotions reserved for members.'},
-  {n: '04', title: 'Member-only events', body: 'CTRL Nights, Sessions and Experiences — with tickets released to members before anyone else.'},
+  {n: '04', title: 'Member-only events', body: 'CTRL Nights, Sessions and Experiences, with tickets released to members before anyone else.'},
   {n: '05', title: 'Early access & giveaways', body: 'New openings, limited tables, launches and partner drops, first.'},
 ];
 
@@ -22,9 +23,8 @@ export default function MembershipPage() {
   return (
     <>
       <Masthead
-        kicker="Stage 02 — Community"
         title={<>One card. <span className="accent">Every room.</span></>}
-        lede="CTRL Room Membership turns a following into a network — real discounts and real access at partner venues across Jordan, with one membership behind all of them."
+        lede="CTRL Room Membership turns a following into a network: real discounts and real access at partner venues across Jordan, with one membership behind all of them."
       />
 
       <Act act="dark" className="!pt-[var(--gap-block)]">
@@ -41,13 +41,12 @@ export default function MembershipPage() {
               </p>
             </div>
             <div className="lg:col-span-5 lg:col-start-8">
-              <Eyebrow index="01">The card</Eyebrow>
-              <Title className="mt-7 text-[clamp(1.9rem,4.2vw,2.9rem)]">
+              <DisplayHeadline className="text-[clamp(1.9rem,4.2vw,2.9rem)] leading-[1.05]">
                 Show it, or don&rsquo;t. It still works.
-              </Title>
+              </DisplayHeadline>
               <Lede className="mt-6">
                 Membership is tied to you, not to a piece of plastic. The card is
-                the physical version — the discount applies whether you hand it
+                the physical version, the discount applies whether you hand it
                 over or just give your name.
               </Lede>
             </div>
@@ -58,10 +57,9 @@ export default function MembershipPage() {
       <Act act="light">
         <Wrap>
           <div className="max-w-[46rem]">
-            <Eyebrow index="02">What you get</Eyebrow>
-            <Title className="mt-7 text-[clamp(2rem,4.8vw,3.4rem)]">
+            <DisplayHeadline className="text-[clamp(2rem,4.8vw,3.4rem)] leading-[1.05]">
               Discounts, access, and the things that sell out.
-            </Title>
+            </DisplayHeadline>
           </div>
           <div className="mt-[var(--gap-block)]">
             <Rows items={PERKS} />
@@ -74,14 +72,14 @@ export default function MembershipPage() {
           <Reveal>
             <div className="grid gap-10 border-t pt-[var(--gap-block)] lg:grid-cols-12" style={{borderColor: 'var(--line)'}}>
               <div className="lg:col-span-5">
-                <Title className="text-[clamp(1.8rem,3.8vw,2.6rem)]">
+                <DisplayHeadline className="text-[clamp(1.8rem,3.8vw,2.6rem)] leading-[1.05]">
                   Your data is the deal, so we say what happens to it.
-                </Title>
+                </DisplayHeadline>
               </div>
               <div className="lg:col-span-6 lg:col-start-7">
                 <Lede>
                   Joining means giving us your email, phone, city and the
-                  categories you care about — with clear consent, from the first
+                  categories you care about, with clear consent, from the first
                   member. That database is the business, which is exactly why we
                   will not sell raw data. Businesses can compete for members who
                   have volunteered real intent; nobody buys a list.
@@ -95,15 +93,14 @@ export default function MembershipPage() {
       <Act act="dark" id="join">
         <Wrap>
           <div className="max-w-[34rem]">
-            <Eyebrow index="03">Join</Eyebrow>
-            <Title className="mt-7 text-[clamp(2.1rem,5.4vw,3.6rem)]">
+            <DisplayHeadline className="text-[clamp(2.1rem,5.4vw,3.6rem)] leading-[1.05]">
               Membership opens with the first partner wave.
-            </Title>
+            </DisplayHeadline>
             <Lede className="mt-6">
               Leave your details and you&rsquo;ll be in the first group through
               the door, before public launch.
             </Lede>
-            {/* Placeholder — wire to the real list provider before launch. */}
+            {/* Placeholder, wire to the real list provider before launch. */}
             <form className="mt-10 flex max-w-[30rem] flex-col gap-3 sm:flex-row">
               <label htmlFor="email" className="sr-only">
                 Email address

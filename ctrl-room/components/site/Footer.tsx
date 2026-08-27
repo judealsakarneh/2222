@@ -3,7 +3,7 @@ import {NAV} from '@/lib/nav';
 import {Wordmark, Bars} from './Marks';
 
 /**
- * Not four equal link columns — that grid is one of the clearest marks of a
+ * Not four equal link columns, that grid is one of the clearest marks of a
  * generated page. The footer is built as a masthead instead: the statement
  * first at full size, then an asymmetric block where the brand holds the left
  * and the links run as two loose groups on the right.

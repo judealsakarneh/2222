@@ -27,7 +27,7 @@ const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
  * has light sections and a site that transitions.
  *
  * The same pass publishes which act is under the header on the root element, so
- * the header can inverct through CSS rather than React state — no frame of lag
+ * the header can inverct through CSS rather than React state, no frame of lag
  * between the two.
  */
 export function ActBackground() {
@@ -93,12 +93,25 @@ export function ActBackground() {
     paint();
     window.addEventListener('scroll', onScroll, {passive: true});
     window.addEventListener('resize', onResize);
-    // Fonts landing changes section heights, so the boundaries move.
+
+    /**
+     * Anything that changes the document's height moves every act boundary:
+     * fonts landing, an image decoding, a reveal expanding a section. Listening
+     * for `resize` and `fonts.ready` only catches two of those, and when one is
+     * missed the layer keeps a colour computed from stale offsets and the page
+     * sits at the wrong temperature until the user happens to scroll.
+     *
+     * Observing the document element catches all of them, which is why this is
+     * a ResizeObserver and not another one-shot listener.
+     */
+    const ro = new ResizeObserver(onResize);
+    ro.observe(document.documentElement);
     document.fonts?.ready.then(onResize).catch(() => {});
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
+      ro.disconnect();
       cancelAnimationFrame(raf);
     };
   }, []);
@@ -109,6 +122,18 @@ export function ActBackground() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10"
       style={{backgroundColor: '#0B0B0B'}}
-    />
+    >
+      {/* Grain sits on the ground, once, for the whole document. Applied
+          per-section it lifts that section by ~3% and leaves a visible seam at
+          its edge. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          opacity: 0.032,
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+    </div>
   );
 }

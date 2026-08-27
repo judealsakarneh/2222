@@ -7,7 +7,7 @@ import {NAV} from '@/lib/nav';
 import {Wordmark} from './Marks';
 
 /**
- * The bar inverts with whichever act is under it — through CSS variables set on
+ * The bar inverts with whichever act is under it, through CSS variables set on
  * the root by ActBackground, not React state, so it never lags the background
  * crossfade by a frame.
  *
@@ -49,7 +49,7 @@ export function Header() {
         }}
       >
         <div className="mx-auto flex h-[68px] max-w-content items-center gap-10 edge">
-          <Link href="/" aria-label="CTRL Room — home" className="shrink-0">
+          <Link href="/" aria-label="CTRL Room, home" className="shrink-0">
             <span style={{['--fg' as string]: 'var(--hdr-fg)'}}>
               <Wordmark size={17} live />
             </span>

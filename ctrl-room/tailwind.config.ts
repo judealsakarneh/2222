@@ -37,13 +37,16 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['var(--font-display)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        sans: ['var(--font-display)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        // Geist Sans is the voice of the site. Archivo is reserved for display
+        // scale only, where its variable width axis does work Geist cannot.
+        sans: ['var(--font-geist-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-geist-sans)', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       letterSpacing: {
-        display: '-0.035em',
-        headline: '-0.02em',
+        // Craft floor puts the tracking floor at -0.04em. Nothing goes tighter.
+        display: '-0.04em',
+        headline: '-0.022em',
       },
       borderRadius: {
         // Panels are near-square. Uniform 16px rounding on every surface is one
@@ -52,7 +55,7 @@ const config: Config = {
         panel: '3px',
         card: '14px',
       },
-      maxWidth: {content: '1280px', text: '68ch'},
+      maxWidth: {content: '1280px', text: '68ch', measure: '72ch'},
       keyframes: {
         ticker: {from: {transform: 'translateX(0)'}, to: {transform: 'translateX(-50%)'}},
         blip: {'0%,100%': {opacity: '1'}, '50%': {opacity: '0.25'}},

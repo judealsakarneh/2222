@@ -1,12 +1,13 @@
 import type {Metadata} from 'next';
 import {Act, Wrap} from '@/components/site/Act';
 import {Masthead} from '@/components/site/Masthead';
-import {Action, Eyebrow, Lede, Reveal, Title} from '@/components/site/UI';
+import {Action, Lede, Reveal, Title} from '@/components/site/UI';
+import {DisplayHeadline} from '@/components/site/DisplayHeadline';
 
 export const metadata: Metadata = {
   title: 'The CTRL Workplace Index',
   description:
-    "A ranked, methodology-backed index of the best places to work in Jordan — built on defined criteria, not opinion.",
+    "A ranked, methodology-backed index of the best places to work in Jordan, built on defined criteria, not opinion.",
 };
 
 const CRITERIA = [
@@ -24,9 +25,8 @@ export default function IndexPage() {
   return (
     <>
       <Masthead
-        kicker="Flagship content property"
         title={<>The CTRL <span className="accent">Workplace Index</span>.</>}
-        lede="A ranked view of the best places to work in Jordan — built on a published methodology, so the answer to “based on what?” is a document, not a shrug."
+        lede="A ranked view of the best places to work in Jordan, built on a published methodology, so the answer to “based on what?” is a document, not a shrug."
       />
 
       <Act act="dark" className="!pt-[var(--gap-block)]">
@@ -48,7 +48,7 @@ export default function IndexPage() {
                 >
                   Anyone can declare &ldquo;the 10 best companies in
                   Jordan&rdquo;. The first question is always{' '}
-                  <span className="accent">based on what?</span> — and without an
+                  <span className="accent">based on what?</span> - and without an
                   answer, the list is worth nothing to the reader and nothing to
                   the companies on it.
                 </p>
@@ -62,10 +62,9 @@ export default function IndexPage() {
         <Wrap>
           <div className="grid gap-14 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <Eyebrow index="01">Methodology</Eyebrow>
-              <Title className="mt-7 text-[clamp(2rem,4.4vw,3rem)]">
+              <DisplayHeadline className="text-[clamp(2rem,4.4vw,3rem)] leading-[1.05]">
                 Eight inputs, published in full.
-              </Title>
+              </DisplayHeadline>
               <Lede className="mt-6">
                 Every company is scored on the same criteria, and the weighting
                 is published alongside the results. A methodology is what turns
@@ -73,7 +72,7 @@ export default function IndexPage() {
               </Lede>
             </div>
 
-            {/* A scored table rather than a card grid — this is an index, and an
+            {/* A scored table rather than a card grid, this is an index, and an
                 index looks like a table. */}
             <div className="lg:col-span-6 lg:col-start-7">
               <ul>
@@ -101,15 +100,14 @@ export default function IndexPage() {
         <Wrap>
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <Eyebrow index="02">Why it compounds</Eyebrow>
-              <Title className="mt-7 text-[clamp(1.9rem,4vw,2.8rem)]">
+              <DisplayHeadline className="text-[clamp(1.9rem,4vw,2.8rem)] leading-[1.05]">
                 Eventually companies ask to be included.
-              </Title>
+              </DisplayHeadline>
             </div>
             <div className="lg:col-span-6 lg:col-start-7">
               <Lede>
                 Built on defensible criteria, the Index becomes a major annual
-                piece of content — and the direction of the conversation
+                piece of content, and the direction of the conversation
                 reverses. It reinforces the Career Room pillar and feeds directly
                 into the recruitment and employer-branding lines in CTRL Room for
                 Business.

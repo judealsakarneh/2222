@@ -5,15 +5,15 @@
 /**
  * CTRL Room — base layer.
  *
- * THE ACT SYSTEM is the important thing here. The page runs through dark and
- * light "acts", and every section declares which one it is with `data-act`.
- * Colour is never written directly on a component — components read the four
- * variables below, so one Panel, one heading, one rule works in both acts and
- * cannot end up as light text on a light ground.
+ * THE ACT SYSTEM. The page runs through dark and light acts; every section
+ * declares one with `data-act`, and that attribute sets every colour token for
+ * everything inside it. No component ever writes a colour directly — they read
+ * these variables. That is what makes one Panel, one Title, one Rows work in
+ * both acts and never render light text on a light ground.
  *
  * A fixed layer behind everything crossfades between the two grounds as you
- * scroll (see ActBackground), which is why the acts change temperature
- * gradually instead of cutting at a section edge.
+ * scroll (see ActBackground), so the acts change temperature gradually instead
+ * of cutting at a section edge.
  */
 
 :root {
@@ -22,32 +22,48 @@
   --teal: #006563;
   --teal-bright: #00a9a4;
 
-  --gap-act: clamp(6rem, 11vw, 10rem);
-  --gap-block: clamp(2.5rem, 5vw, 4.5rem);
-  --edge: clamp(1.25rem, 4vw, 3.5rem);
+  /* The one curve. Pinned by the brief; a strong ease-out that leaves
+     immediately and settles long. Nothing on this site is linear. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* 8pt grid. Every vertical gap on the page resolves to a multiple of 8, so
+     the page has one measure instead of a pile of arbitrary paddings. */
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+  --s-4: 32px;
+  --s-6: 48px;
+  --s-8: 64px;
+  --s-12: 96px;
+  --gap-act: clamp(80px, 10vw, 144px);
+  --gap-block: clamp(40px, 5vw, 72px);
+  --edge: clamp(24px, 4vw, 56px);
 }
 
-/* The two acts. Every colour token the page uses is defined in both. */
 [data-act='dark'] {
   --fg: #ffffff;
-  --fg-2: rgba(255, 255, 255, 0.62);
-  --fg-3: rgba(255, 255, 255, 0.36);
+  --fg-2: rgba(255, 255, 255, 0.64);
+  --fg-3: rgba(255, 255, 255, 0.5);
   --line: rgba(255, 255, 255, 0.11);
   --line-strong: rgba(255, 255, 255, 0.2);
   --surface: rgba(255, 255, 255, 0.025);
   --accent: #00a9a4;
   --on-accent: #06201f;
+  --scroll-thumb: rgba(255, 255, 255, 0.16);
+  --scroll-track: rgba(255, 255, 255, 0.04);
 }
 
 [data-act='light'] {
   --fg: #151515;
-  --fg-2: rgba(21, 21, 21, 0.66);
-  --fg-3: rgba(21, 21, 21, 0.42);
+  --fg-2: rgba(21, 21, 21, 0.68);
+  --fg-3: rgba(21, 21, 21, 0.66);
   --line: rgba(21, 21, 21, 0.14);
   --line-strong: rgba(21, 21, 21, 0.26);
   --surface: rgba(255, 255, 255, 0.72);
   --accent: #006563;
   --on-accent: #ffffff;
+  --scroll-thumb: rgba(21, 21, 21, 0.22);
+  --scroll-track: rgba(21, 21, 21, 0.05);
 }
 
 @layer base {
@@ -58,28 +74,75 @@
   html {
     background-color: var(--ink);
     scroll-behavior: smooth;
+    /**
+     * BROWSER SURFACES. The parts nobody draws still carry the design, and
+     * shipping them with browser defaults is the clearest sign a page was
+     * assembled rather than built. Selection, caret, scrollbar, focus ring and
+     * underline offset are all themed from the act tokens, so they invert with
+     * the ground like everything else.
+     */
+    scrollbar-color: var(--scroll-thumb, rgba(255, 255, 255, 0.16))
+      var(--scroll-track, rgba(255, 255, 255, 0.04));
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scroll-track, rgba(255, 255, 255, 0.04));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb, rgba(255, 255, 255, 0.16));
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent, #00a9a4);
+    background-clip: content-box;
   }
 
   body {
     color: #fff;
+    caret-color: var(--accent, #00a9a4);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* Real kerning, not the browser's approximation. */
+    font-kerning: normal;
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: rgba(0, 169, 164, 0.3);
+    background: rgba(0, 169, 164, 0.32);
     color: #fff;
+  }
+  [data-act='light'] ::selection {
+    background: rgba(0, 101, 99, 0.24);
+    color: #151515;
   }
 
   :focus-visible {
     outline: 2px solid var(--accent, #00a9a4);
     outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
@@ -89,24 +152,32 @@
 
 @layer components {
   /**
-   * The instrumentation label. Every eyebrow, index, timestamp and readout.
-   * One treatment repeated everywhere is what makes the page read as a single
-   * console rather than a stack of unrelated blocks.
+   * Small UI text: nav items, button labels, captions. Geist Sans at a small
+   * size, normal case. It replaces the old mono-uppercase-tracked treatment,
+   * which was monospace worn as a costume rather than used on data.
    */
   .label {
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 10.5px;
+    font-size: 12.5px;
     line-height: 1.4;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    letter-spacing: -0.008em;
     font-weight: 500;
   }
 
   /**
-   * PANEL. A hairline box with a 3px radius — not a rounded, shadowed, blurred
-   * card. The near-square corner is doing real work: it reads as an instrument
-   * housing, and it is the single fastest way to stop a dark layout looking
-   * like every generated page.
+   * Measurement type. Geist Mono appears only where a figure is being read:
+   * the clock, the stat readouts, the member number. Not as a label. Mono worn
+   * as a costume for "technical" is a craft-floor violation.
+   */
+  .measure {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'zero' 1;
+  }
+
+  /**
+   * PANEL. A hairline box at 3px radius, not a rounded shadowed card. The
+   * near-square corner reads as an instrument housing and is the fastest way to
+   * stop a dark layout looking generated.
    */
   .panel {
     background: var(--surface);
@@ -114,9 +185,16 @@
     border-radius: 3px;
   }
 
-  /* A rule that spans a container and carries a label sitting on it. */
-  .rule {
-    border-top: 1px solid var(--line);
+  /* A rule that fades where it meets air, rather than stopping dead. */
+  .rule-fade {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--line) 12%,
+      var(--line) 88%,
+      transparent
+    );
   }
 
   .accent {
@@ -128,25 +206,19 @@
     mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
   }
 
-  /**
-   * The header inverts with the act currently under it. Written as plain CSS
-   * against a root attribute rather than React state so it never lags a frame
-   * behind the background crossfade.
-   */
+  /* The header inverts with whichever act is under it, driven by a root
+     attribute in CSS rather than React state so it never lags the crossfade. */
   .site-header {
     --hdr-fg: #ffffff;
-    --hdr-fg-2: rgba(255, 255, 255, 0.6);
+    --hdr-fg-2: rgba(255, 255, 255, 0.62);
     --hdr-line: rgba(255, 255, 255, 0.12);
     --hdr-bg: rgba(11, 11, 11, 0.88);
-    /* The header sits outside every [data-act] block, so it has to declare the
-       accent pair itself — inherited, they resolve to nothing and the CTA loses
-       its fill entirely. */
     --accent: #00a9a4;
     --on-accent: #06201f;
   }
   :root[data-act-now='light'] .site-header {
     --hdr-fg: #151515;
-    --hdr-fg-2: rgba(21, 21, 21, 0.62);
+    --hdr-fg-2: rgba(21, 21, 21, 0.64);
     --hdr-line: rgba(21, 21, 21, 0.14);
     --hdr-bg: rgba(242, 243, 243, 0.9);
     --accent: #006563;
@@ -155,12 +227,17 @@
 }
 
 @layer utilities {
-  .nums { font-variant-numeric: tabular-nums; }
+  .nums {
+    font-variant-numeric: tabular-nums;
+  }
 
-  /* Optical width. Archivo is variable — the big display sizes run slightly
-     expanded, which is what gives the headlines their broadcast weight. */
-  .wide { font-stretch: 112%; }
-  .narrow { font-stretch: 92%; }
+  /* Display type. Archivo only, and only here. */
+  .display {
+    font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
 
   .grain::before {
     content: '';
@@ -171,5 +248,8 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .edge { padding-left: var(--edge); padding-right: var(--edge); }
+  .edge {
+    padding-left: var(--edge);
+    padding-right: var(--edge);
+  }
 }

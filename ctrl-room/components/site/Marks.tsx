@@ -1,8 +1,8 @@
 /**
  * Brand marks.
  *
- * The deck's own line — "CTRL Room reads like a place where information is
- * being monitored" — is the whole identity, so the mark beside the wordmark is
+ * The deck's own line - "CTRL Room reads like a place where information is
+ * being monitored" - is the whole identity, so the mark beside the wordmark is
  * a live indicator, not an ornament. It blinks because a control room's
  * indicators blink; a static decorative shape would say nothing.
  */
@@ -24,7 +24,7 @@ export function Signal({
   );
 }
 
-/** Three ascending bars — used where a "signal strength" read is wanted. */
+/** Three ascending bars, used where a "signal strength" read is wanted. */
 export function Bars({size = 14, className = ''}: {size?: number; className?: string}) {
   return (
     <svg

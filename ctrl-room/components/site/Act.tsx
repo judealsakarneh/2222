@@ -6,7 +6,7 @@ import type {ReactNode} from 'react';
  * The `data-act` attribute does two jobs: it sets every colour token for
  * everything inside (see globals.css), and it is what ActBackground reads to
  * work out where the ground should change. Nothing inside an Act should ever
- * hard-code a colour — that is how a block ends up unreadable when its act
+ * hard-code a colour, that is how a block ends up unreadable when its act
  * flips.
  *
  * Acts are transparent. The ground is the fixed layer behind them.
@@ -22,7 +22,7 @@ export function Act({
   id?: string;
   children: ReactNode;
   className?: string;
-  /** Skip the standard vertical rhythm — for full-bleed bands like the ticker. */
+  /** Skip the standard vertical rhythm, for full-bleed bands like the ticker. */
   bleed?: boolean;
 }) {
   return (

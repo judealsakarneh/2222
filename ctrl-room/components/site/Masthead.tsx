@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react';
 import {Act, Wrap} from './Act';
-import {Lede, Title} from './UI';
-import {Signal} from './Marks';
+import {Lede} from './UI';
+import {DisplayHeadline} from './DisplayHeadline';
 
 /**
  * Every inner page opens the same way: a kicker on a rule, the title at display
@@ -9,33 +9,28 @@ import {Signal} from './Marks';
  * pages read as one publication.
  */
 export function Masthead({
-  kicker,
   title,
   lede,
   aside,
 }: {
-  kicker: string;
   title: ReactNode;
   lede: string;
   aside?: ReactNode;
 }) {
   return (
-    <Act act="dark" className="grain pt-[140px] sm:pt-[164px]">
+    <Act act="dark" className="pt-[140px] sm:pt-[164px]">
       <Wrap>
         <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <div
-              className="flex items-center gap-3.5 border-t pt-4"
-              style={{borderColor: 'var(--line)'}}
+          <div className="lg:col-span-9 pt-10">
+            <div className="border-t" style={{borderColor: 'var(--line)'}} />
+            <DisplayHeadline
+              as="h1"
+              className="text-[clamp(2.4rem,6.6vw,4.6rem)] leading-[1.0]"
+              from={94}
+              to={110}
             >
-              <Signal size={6} className="accent" />
-              <span className="label" style={{color: 'var(--fg-2)'}}>
-                {kicker}
-              </span>
-            </div>
-            <Title as="h1" className="mt-8 text-[clamp(2.6rem,7.4vw,5.2rem)]">
               {title}
-            </Title>
+            </DisplayHeadline>
             <Lede className="mt-8">{lede}</Lede>
           </div>
           {aside ? <div className="lg:col-span-4">{aside}</div> : null}

@@ -11,7 +11,7 @@ import {Signal} from './Marks';
  * means something: the brand is a room where information is monitored, and the
  * first thing a monitoring room shows is the time.
  *
- * Rendered empty on the server and filled after mount — the server has no idea
+ * Rendered empty on the server and filled after mount, the server has no idea
  * what time it is where the reader is, and a hydration mismatch on the first
  * line of the page is not worth the half-second.
  */
@@ -44,7 +44,7 @@ export function StatusLine({place = 'Amman'}: {place?: string}) {
       <span className="label" style={{color: 'var(--fg-3)'}}>
         {place}
       </span>
-      <span className="label nums" style={{color: 'var(--fg-3)', minWidth: '4ch'}}>
+      <span className="measure text-[12px]" style={{color: 'var(--fg-3)', minWidth: '4.5ch'}}>
         {now ?? ' '}
       </span>
     </div>
