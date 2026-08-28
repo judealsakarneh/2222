@@ -61,7 +61,7 @@ export function Featured({
             <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--accent)]">
               {eyebrow}
             </p>
-            <h3 className="display mt-4 text-[clamp(1.6rem,3.4vw,2.6rem)] font-bold leading-[1.04] tracking-[-0.02em] text-white">
+            <h3 className="display mt-4 text-[clamp(1.6rem,3.4vw,2.6rem)] font-bold leading-[1.04] tracking-[-0.02em] t-1">
               {title}
             </h3>
             <p className="mt-4 max-w-[42ch] text-[15px] leading-[1.6] text-white/70">
@@ -69,7 +69,7 @@ export function Featured({
             </p>
             <Link
               href={href}
-              className="mt-7 inline-block border border-white/25 bg-white/5 px-5 py-3 text-[13px] tracking-[0.04em] text-white backdrop-blur-sm transition-colors duration-[160ms] hover:border-white/50 hover:bg-white/10"
+              className="mt-7 inline-block border b-line-2 bg-white/5 px-5 py-3 text-[13px] tracking-[0.04em] t-1 backdrop-blur-sm transition-colors duration-[160ms] hover:border-white/50 hover:bg-white/10"
             >
               {cta}
             </Link>

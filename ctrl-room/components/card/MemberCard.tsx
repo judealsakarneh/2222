@@ -76,7 +76,7 @@ export function MemberCard({
           }}
         />
 
-        <div className="relative flex h-full flex-col justify-between p-[1.5em] text-white">
+        <div className="relative flex h-full flex-col justify-between p-[1.5em] t-1">
           <div className="flex items-start justify-between">
             <span className="inline-flex items-baseline gap-[0.45em] leading-none">
               <span

@@ -5,6 +5,7 @@ import {SectionLabel} from '@/components/ui/SectionLabel';
 import {RevealText} from '@/components/ui/RevealText';
 import {HorizontalRail} from '@/components/ui/HorizontalRail';
 import {Button} from '@/components/ui/Button';
+import {Ground} from '@/components/ui/Ground';
 
 /**
  * An event is a poster, not a calendar row. The date is set large across the
@@ -36,10 +37,10 @@ export function EventCard({event, index}: {event: CtrlEvent; index: number}) {
                 'linear-gradient(to top, rgba(11,11,11,0.94) 0%, rgba(11,11,11,0.55) 38%, rgba(11,11,11,0.08) 72%)',
             }}
           />
-          <div className="pointer-events-none absolute inset-0" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)'}} />
+          <div className="pointer-events-none absolute inset-0" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)'}} />
 
           <div className="absolute inset-x-0 top-0 flex items-start justify-between p-5">
-            <span className="rounded-[2px] border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-white backdrop-blur-sm">
+            <span className="rounded-[2px] border border-white/25 bg-black/40 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-white backdrop-blur-sm">
               {event.format}
             </span>
             <span className="text-right">
@@ -60,9 +61,9 @@ export function EventCard({event, index}: {event: CtrlEvent; index: number}) {
               {event.title}
             </h3>
 
-            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10.5px] tracking-[0.1em] text-white/55">
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10.5px] tracking-[0.1em] text-white/70">
               <span>{event.time}</span>
-              <span className="h-[3px] w-[3px] rounded-full bg-white/30" aria-hidden />
+              <span className="h-[3px] w-[3px] rounded-full bg-white/40" aria-hidden />
               <span>{event.place}</span>
             </div>
 
@@ -88,13 +89,13 @@ export function EventCard({event, index}: {event: CtrlEvent; index: number}) {
 
 export function Events() {
   return (
-    <section id="events" className="scroll-mt-24 border-y border-white/[0.09] bg-ink-950 py-[calc(var(--gap-act)/2)]">
+    <Ground name="dark" id="events" className="scroll-mt-24 py-[calc(var(--gap-act)/2)]">
       <div className="edge">
         <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <SectionLabel n="04">What&rsquo;s on</SectionLabel>
             <RevealText
-              className="display mt-7 text-[clamp(2.1rem,4.4vw,3.4rem)] font-black leading-[0.98] tracking-[-0.03em] text-white"
+              className="display mt-7 text-[clamp(2.1rem,4.4vw,3.4rem)] font-black leading-[0.98] tracking-[-0.03em] t-1"
               lines={['Nights worth', 'leaving for.']}
             />
           </div>
@@ -111,10 +112,10 @@ export function Events() {
           ))}
         </HorizontalRail>
 
-        <p className="mt-4 max-w-[52ch] font-mono text-[10.5px] tracking-[0.12em] text-white/50">
+        <p className="mt-4 max-w-[52ch] font-mono text-[10.5px] tracking-[0.12em] t-3">
           Listings are placeholder pending real programming
         </p>
       </div>
-    </section>
+    </Ground>
   );
 }

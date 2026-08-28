@@ -15,7 +15,8 @@ import {IMAGES, type ImageKey} from './images';
 export const NAV = [
   {label: 'Discover', href: '#discover'},
   {label: 'Events', href: '#events'},
-  {label: 'Membership', href: '#elite'},
+  // One item per section. Membership and Elite both pointed at #elite, which
+  // meant two items lit up together whenever that section owned the viewport.
   {label: 'Elite', href: '#elite'},
   {label: 'Community', href: '#community'},
   {label: 'Sponsors', href: '#partners'},

@@ -1,6 +1,7 @@
 'use client';
 
-import {motion, useReducedMotion} from 'framer-motion';
+import {motion} from 'framer-motion';
+import {useReducedMotion} from '@/lib/useReducedMotion';
 import type {ReactNode} from 'react';
 
 /**
@@ -49,7 +50,16 @@ export function RevealText({
         viewport={{once: true, margin: '-8%'}}
       >
         {lines.map((line, i) => (
-          <span key={i} className="block overflow-hidden">
+          // The mask is sized by line-height, which sits tighter than the
+          // glyphs' actual ink: at leading below 1 the descenders of g, y and
+          // j get sliced off. The padding gives the ink room inside the mask
+          // and the equal negative margin takes it back out of the layout, so
+          // nothing below moves.
+          <span
+            key={i}
+            className="block overflow-hidden"
+            style={{paddingBottom: '0.2em', marginBottom: '-0.2em'}}
+          >
             <motion.span
               className="block will-change-transform"
               variants={reduce ? undefined : SHOW}

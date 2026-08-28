@@ -1,8 +1,9 @@
 'use client';
 
 import {useRef} from 'react';
-import {motion, useReducedMotion, useScroll, useTransform, type MotionValue} from 'framer-motion';
-import {IMAGES} from '@/lib/images';
+import {motion, useScroll, useTransform, type MotionValue} from 'framer-motion';
+import {useReducedMotion} from '@/lib/useReducedMotion';
+import {HeroImage} from './HeroImage';
 import {MagneticButton} from '@/components/ui/Button';
 
 /**
@@ -75,40 +76,8 @@ export function Hero() {
           }}
           className="absolute inset-y-0 right-0 w-full will-change-transform lg:w-[68%]"
         >
-          <div
-            className="absolute inset-0"
-            style={{
-              // The photograph dissolves leftward and downward instead of
-              // ending at an edge, so the headline can cross into it.
-              WebkitMaskImage:
-                'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.45) 22%, #000 52%), linear-gradient(180deg, #000 62%, transparent 100%)',
-              maskImage:
-                'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.45) 22%, #000 52%), linear-gradient(180deg, #000 62%, transparent 100%)',
-              WebkitMaskComposite: 'source-in',
-              maskComposite: 'intersect',
-            }}
-          >
-            <img
-              src={IMAGES.hero.src}
-              alt={IMAGES.hero.alt}
-              fetchPriority="high"
-              decoding="async"
-              className="h-full w-full object-cover object-[62%_center]"
-            />
-          </div>
+          <HeroImage />
         </motion.div>
-
-        {/* Below lg the building sits under the headline rather than beside
-            it, so it gets a scrim. Removed at lg, where the mask alone does
-            the work and a scrim would only flatten the picture. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 lg:hidden"
-          style={{
-            background:
-              'linear-gradient(to right, rgba(11,11,11,0.94) 0%, rgba(11,11,11,0.82) 46%, rgba(11,11,11,0.5) 100%)',
-          }}
-        />
 
         {/* The frame that resolves out of the photograph as it settles. */}
         <motion.div

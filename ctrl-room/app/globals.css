@@ -259,3 +259,68 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ============================================================
+   GROUNDS
+   ------------------------------------------------------------
+   The page moves through three environments. Each one carries its own
+   foreground values, and every piece of type on the page reads its colour
+   from these variables rather than naming white or black directly.
+
+   That pairing is the whole point. Earlier in this project the background
+   crossfaded on scroll while section tokens flipped instantly at a boundary,
+   and the two desynchronised: near-black type on a near-black ground,
+   invisible. Here the ground and its foregrounds are declared together in one
+   block, so a section cannot be showing one environment's background with
+   another's text.
+   ============================================================ */
+
+[data-ground='dark'] {
+  --g-bg: #0b0b0b;
+  --g-bg-2: #101010;
+  --g-fg: #ffffff;
+  --g-fg-2: #b5b5b5;
+  --g-fg-3: rgba(255, 255, 255, 0.55);
+  --g-line: rgba(255, 255, 255, 0.09);
+  --g-line-2: rgba(255, 255, 255, 0.18);
+  --g-accent: #009491;
+  --g-chip: rgba(255, 255, 255, 0.14);
+}
+
+[data-ground='paper'] {
+  --g-bg: #f6f4f1;
+  --g-bg-2: #ffffff;
+  --g-fg: #151515;
+  --g-fg-2: #4a4a4a;
+  --g-fg-3: rgba(21, 21, 21, 0.6);
+  --g-line: rgba(21, 21, 21, 0.14);
+  --g-line-2: rgba(21, 21, 21, 0.26);
+  --g-accent: #006563;
+  --g-chip: rgba(21, 21, 21, 0.16);
+}
+
+[data-ground='teal'] {
+  --g-bg: #006563;
+  --g-bg-2: #00514f;
+  --g-fg: #ffffff;
+  --g-fg-2: rgba(255, 255, 255, 0.86);
+  --g-fg-3: rgba(255, 255, 255, 0.8);
+  --g-line: rgba(255, 255, 255, 0.24);
+  --g-line-2: rgba(255, 255, 255, 0.4);
+  --g-accent: #ffffff;
+  --g-chip: rgba(255, 255, 255, 0.3);
+}
+
+/* Type roles. Three tiers and an accent, all ground-relative. */
+.t-1 { color: var(--g-fg); }
+.t-2 { color: var(--g-fg-2); }
+.t-3 { color: var(--g-fg-3); }
+.t-a { color: var(--g-accent); }
+.bg-g { background-color: var(--g-bg); }
+.bg-g2 { background-color: var(--g-bg-2); }
+.b-line { border-color: var(--g-line); }
+.b-line-2 { border-color: var(--g-line-2); }
+.bg-a { background-color: var(--g-accent); }
+.b-chip { border-color: var(--g-chip); }
+/* A tinted wash of the current ground, for raised surfaces. */
+.surface-g { background-color: color-mix(in srgb, var(--g-fg) 4%, var(--g-bg)); }

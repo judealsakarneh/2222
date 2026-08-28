@@ -1,7 +1,8 @@
 'use client';
 
 import {useRef, useState, type ReactNode} from 'react';
-import {motion, useReducedMotion} from 'framer-motion';
+import {motion} from 'framer-motion';
+import {useReducedMotion} from '@/lib/useReducedMotion';
 
 type Variant = 'solid' | 'outline' | 'ghost';
 
@@ -9,11 +10,15 @@ const BASE =
   'group relative inline-flex items-center gap-3 rounded-[2px] px-6 py-3.5 text-[12px] font-medium uppercase tracking-[0.1em] transition-colors duration-200';
 
 const VARIANTS: Record<Variant, string> = {
-  // Brand teal at full strength. White on #006563 is 6.9:1, so the fill can
-  // carry type without lightening the brand colour.
-  solid: 'bg-teal text-white hover:bg-[#00807D]',
-  outline: 'border border-white/20 text-white hover:border-white/45 hover:bg-white/[0.04]',
-  ghost: 'text-white/70 hover:text-white',
+  // Fixed colours, not ground tokens. The fill is always brand teal, so the
+  // type on it must always be white; inheriting the ground put #151515 on
+  // #006563 the moment the button appeared on paper. On the teal ground the
+  // pair inverts, because teal on teal is not a button.
+  solid:
+    'bg-teal text-white hover:bg-[#00807D] [[data-ground="teal"]_&]:bg-white [[data-ground="teal"]_&]:text-[#006563] [[data-ground="teal"]_&]:hover:bg-white/90',
+  // Outline has no fill, so it does follow the ground.
+  outline: 'border b-line-2 t-1 hover:surface-g',
+  ghost: 't-3 hover:t-1',
 };
 
 export function Button({

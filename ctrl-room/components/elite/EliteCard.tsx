@@ -1,7 +1,8 @@
 'use client';
 
 import {useRef, useState} from 'react';
-import {motion, useReducedMotion} from 'framer-motion';
+import {motion} from 'framer-motion';
+import {useReducedMotion} from '@/lib/useReducedMotion';
 
 /**
  * The Elite card, built rather than photographed.
@@ -39,8 +40,15 @@ export function EliteCard() {
         onMouseLeave={() => setT({rx: 0, ry: 0, mx: 50, my: 50, on: false})}
         animate={{rotateX: t.rx, rotateY: t.ry}}
         transition={{type: 'spring', stiffness: 190, damping: 20, mass: 0.5}}
-        className="relative aspect-[1.585/1] w-full max-w-[30rem] rounded-[14px] will-change-transform"
+        className="relative aspect-[1.585/1] w-full max-w-[30rem] rounded-[3.2cqw] will-change-transform md:max-w-[36rem] lg:max-w-[30rem]"
         style={{
+          // The card is its own containment context, so every value below is a
+          // fraction of the card's width rather than a fixed rem. At 576px and
+          // at 293px it is the same object at three sizes, which is why nothing
+          // inside it can outgrow it, and why the wider cap in the tablet band
+          // - where the card had 211px of empty paper beside it - needed no
+          // other change.
+          containerType: 'inline-size',
           transformStyle: 'preserve-3d',
           background:
             'linear-gradient(152deg, #252525 0%, #1C1C1C 34%, #151515 62%, #0B0B0B 100%)',
@@ -53,7 +61,7 @@ export function EliteCard() {
       >
         {/* Edge: a bright top-left catch over a full hairline. */}
         <div
-          className="pointer-events-none absolute inset-0 rounded-[14px]"
+          className="pointer-events-none absolute inset-0 rounded-[3.2cqw]"
           style={{
             boxShadow:
               'inset 0 0 0 1px rgba(255,255,255,0.11), inset 1px 1px 0 0 rgba(255,255,255,0.2)',
@@ -62,31 +70,41 @@ export function EliteCard() {
 
         {/* Specular band, following the pointer. */}
         <div
-          className="pointer-events-none absolute inset-0 rounded-[14px] transition-opacity duration-500"
+          className="pointer-events-none absolute inset-0 rounded-[3.2cqw] transition-opacity duration-500"
           style={{
             opacity: t.on ? 1 : 0,
             background: `radial-gradient(38rem circle at ${t.mx}% ${t.my}%, rgba(255,255,255,0.12), transparent 46%)`,
           }}
         />
 
-        {/* Debossed wordmark, pressed into the surface rather than printed on it. */}
-        <span
-          className="display pointer-events-none absolute -right-2 bottom-1 select-none text-[7.4rem] font-black leading-none tracking-[-0.05em]"
-          style={{
-            color: 'transparent',
-            fontStretch: '82%',
-            textShadow: '0 1.5px 0 rgba(255,255,255,0.055), 0 -1px 0 rgba(0,0,0,0.55)',
-          }}
-          aria-hidden
-        >
-          CTRL
-        </span>
+        {/* Debossed wordmark, pressed into the surface rather than printed on
+            it, and cut by the card edge the way a real deboss would be. The
+            clip lives on this layer so the card's drop shadow stays outside it. */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[3.2cqw]" aria-hidden>
+          <span
+            className="display absolute select-none font-black leading-none tracking-[-0.05em]"
+            style={{
+              right: '-1.5cqw',
+              bottom: '-1cqw',
+              fontSize: '26cqw',
+              color: 'transparent',
+              fontStretch: '82%',
+              textShadow: '0 0.3cqw 0 rgba(255,255,255,0.055), 0 -0.2cqw 0 rgba(0,0,0,0.55)',
+            }}
+          >
+            CTRL
+          </span>
+        </div>
 
-        <div className="relative flex h-full flex-col justify-between p-6 sm:p-7">
+        <div className="relative flex h-full flex-col justify-between" style={{padding: '5.4cqw'}}>
           <div className="flex items-start justify-between">
-            <span className="flex items-baseline gap-2">
-              <span className="display text-[17px] font-black leading-none tracking-[-0.03em] text-white">CTRL</span>
-              <span className="text-[8.5px] font-medium uppercase tracking-[0.3em] text-teal-lit">Room</span>
+            <span className="flex items-baseline" style={{gap: '1.6cqw'}}>
+              <span className="display font-black leading-none tracking-[-0.03em] text-white" style={{fontSize: '3.7cqw'}}>
+                CTRL
+              </span>
+              <span className="font-medium uppercase tracking-[0.3em] text-teal-lit" style={{fontSize: '1.85cqw'}}>
+                Room
+              </span>
             </span>
 
             {/* NFC. Three arcs and a dot, drawn small and left alone. */}
@@ -97,15 +115,21 @@ export function EliteCard() {
             </svg>
           </div>
 
-          <div className="flex items-end justify-between gap-6">
+          <div className="flex items-end justify-between" style={{gap: '4cqw'}}>
             <span>
-              <span className="block font-mono text-[8.5px] uppercase tracking-[0.24em] text-white/50">Member</span>
-              <span className="mt-1.5 block font-mono text-[15px] tracking-[0.16em] text-white/85">0001</span>
+              <span className="block font-mono uppercase tracking-[0.24em] text-white/55" style={{fontSize: '1.85cqw'}}>
+                Member
+              </span>
+              <span className="mt-[1.4cqw] block font-mono tracking-[0.16em] text-white/85" style={{fontSize: '3.2cqw'}}>
+                0001
+              </span>
             </span>
 
-            <span className="flex items-center gap-3">
-              <span className="h-[7px] w-[7px] rotate-45 bg-teal-lit" aria-hidden />
-              <span className="font-mono text-[9px] uppercase tracking-[0.26em] text-white/50">Elite</span>
+            <span className="flex items-center" style={{gap: '2.4cqw'}}>
+              <span className="rotate-45 bg-teal-lit" style={{width: '1.5cqw', height: '1.5cqw'}} aria-hidden />
+              <span className="font-mono uppercase tracking-[0.26em] text-white/55" style={{fontSize: '1.95cqw'}}>
+                Elite
+              </span>
             </span>
           </div>
         </div>

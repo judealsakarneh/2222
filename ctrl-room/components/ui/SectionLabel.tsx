@@ -14,11 +14,11 @@ export function SectionLabel({
 }) {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <span className="h-[6px] w-[6px] shrink-0 bg-teal-lit" aria-hidden />
+      <span className="h-[6px] w-[6px] shrink-0 bg-a" aria-hidden />
       {n ? (
-        <span className="font-mono text-[10px] tracking-[0.14em] text-white/50">{n}</span>
+        <span className="font-mono text-[10px] tracking-[0.14em] t-3">{n}</span>
       ) : null}
-      <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-lit">
+      <span className="text-[10px] font-medium uppercase tracking-[0.2em] t-a">
         {children}
       </span>
     </div>
@@ -27,5 +27,5 @@ export function SectionLabel({
 
 /** A full-bleed hairline. One value, used everywhere a rule is needed. */
 export function Rule({className = ''}: {className?: string}) {
-  return <div className={`h-px w-full bg-white/[0.09] ${className}`} aria-hidden />;
+  return <div className={`h-px w-full ${className}`} style={{background: 'var(--g-line)'}} aria-hidden />;
 }

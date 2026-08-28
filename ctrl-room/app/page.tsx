@@ -6,23 +6,26 @@ import {Events} from '@/components/events/Events';
 import {Elite} from '@/components/elite/Elite';
 import {Partners} from '@/components/partners/Partners';
 import {Social} from '@/components/social/Social';
+import {ColorSeam, GroundFold, TealSeam} from '@/components/ui/ColorSeam';
 
 /**
- * Section order is a rhythm, not a list. Each block deliberately differs in
- * structure from the one before it, because two adjacent sections sharing a
- * column layout is the loudest signal that a page was generated:
+ * The page is one journey through three environments rather than a stack of
+ * blocks, and the seams are part of the design rather than the gaps between
+ * parts of it.
  *
- *   hero      full-bleed, layered, sticky
- *   strip     five even columns, hairline separated
- *   discover  asymmetric 4/7 with a sticky heading, index rows
- *   picks     bento, one lead tile and three
- *   events    horizontal rail, portrait posters
- *   elite     centred split, an object on one side
- *   partners  full-bleed colour band, the one loud block
- *   social    horizontal contact sheet, uneven widths
+ *   dark    hero, the system strip, the discovery index
+ *   SEAM    DISCOVER wipes to paper, the word inverting through the boundary
+ *   paper   CTRL Picks, photographs on stock
+ *   SEAM    AFTER DARK returns to black
+ *   dark    the event rail, posters on black
+ *   SEAM    MEMBERSHIP back to paper
+ *   paper   CTRL Elite, a black card on stock
+ *   SEAM    PARTNERS, teal opening outward from the centre
+ *   teal    the partner proposition, the one loud block
+ *   dark    the community feed and the footer
  *
- * Membership folds into Elite and community into Social on purpose. Eight
- * sections that each do something beats twelve that repeat each other.
+ * Section order still varies in construction as well as in colour, so no two
+ * adjacent blocks share both a ground and a column structure.
  */
 export default function Home() {
   return (
@@ -31,10 +34,23 @@ export default function Home() {
       <Hero />
       <SystemStrip />
       <LiveIndex />
+
+      <ColorSeam from="dark" to="paper" word="Discover" />
       <Picks />
+
+      <ColorSeam from="paper" to="dark" word="After dark" />
       <Events />
+
+      <ColorSeam from="dark" to="paper" word="Membership" />
       <Elite />
+
+      <TealSeam from="paper" word="Partners" />
       <Partners />
+
+      {/* The one environment change with no seam in front of it. Without
+          this the teal act ended on a straight horizontal line. */}
+      <GroundFold from="teal" to="dark" />
+
       <Social />
     </>
   );

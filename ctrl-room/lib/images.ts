@@ -10,6 +10,9 @@
 export type ImageAsset = {
   /** Path under /public. */
   src: string;
+  /** Intrinsic pixels, where known, so the box is reserved before load. */
+  width?: number;
+  height?: number;
   /** Intrinsic ratio, so layout can reserve space before the file loads. */
   ratio: number;
   /** Empty string: every image here is decorative and captioned in the DOM. */
@@ -21,9 +24,13 @@ export type ImageAsset = {
 export const IMAGES = {
   hero: {
     src: '/img/hero.webp',
-    ratio: 1000 / 419,
+    /** 940x537. Keep any replacement at or near 16:9 so the crop holds. */
+    ratio: 940 / 537,
+    width: 940,
+    height: 537,
     alt: '',
-    brief: 'REPLACE - contemporary Amman building at night, lit from within, three-quarter low angle, no signage',
+    brief:
+      'REPLACE - contemporary Amman architecture at night. Dark, geometric, warm light from within, deep shadow on the left third so the headline has ground to sit on. Not a landmark, not a skyline.',
   },
   venue: {
     src: '/img/venue.webp',

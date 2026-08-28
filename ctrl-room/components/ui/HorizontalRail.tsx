@@ -85,7 +85,7 @@ function RailArrow({
       onClick={onClick}
       disabled={disabled}
       aria-label={dir === 1 ? 'Scroll right' : 'Scroll left'}
-      className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors duration-200 hover:border-white/40 hover:bg-white/[0.05] disabled:pointer-events-none disabled:opacity-25"
+      className="flex h-11 w-11 items-center justify-center rounded-full border b-line-2 t-1 transition-colors duration-200 hover:border-white/40 hover:bg-white/[0.05] disabled:pointer-events-none disabled:opacity-25"
     >
       <svg width="15" height="11" viewBox="0 0 14 10" fill="none" aria-hidden style={{transform: dir === -1 ? 'rotate(180deg)' : undefined}}>
         <path d="M0 5h12M8.5 1.5 12 5l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" />

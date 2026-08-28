@@ -4,6 +4,7 @@ import {IMAGES} from '@/lib/images';
 import {SectionLabel} from '@/components/ui/SectionLabel';
 import {RevealText} from '@/components/ui/RevealText';
 import {Button} from '@/components/ui/Button';
+import {Ground} from '@/components/ui/Ground';
 
 /**
  * The feed, as an editorial strip rather than an embed. Frames of uneven
@@ -21,13 +22,13 @@ const STRIP = [
 
 export function Social() {
   return (
-    <section id="community" className="scroll-mt-24 py-[calc(var(--gap-act)/2)]">
+    <Ground name="dark" id="community" className="scroll-mt-24 py-[calc(var(--gap-act)/2)]">
       <div className="edge">
-        <div className="grid items-end gap-x-16 gap-y-8 border-b border-white/[0.09] pb-9 lg:grid-cols-12">
+        <div className="grid items-end gap-x-16 gap-y-8 border-b b-line pb-9 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <SectionLabel n="08">Community</SectionLabel>
             <RevealText
-              className="display mt-7 text-[clamp(2.1rem,4.4vw,3.4rem)] font-black leading-[0.98] tracking-[-0.03em] text-white"
+              className="display mt-7 text-[clamp(2.1rem,4.4vw,3.4rem)] font-black leading-[0.98] tracking-[-0.03em] t-1"
               lines={['Real people.', 'Real recommendations.']}
             />
           </div>
@@ -51,15 +52,15 @@ export function Social() {
                 decoding="async"
                 className="absolute inset-0 h-full w-full object-cover grayscale-[0.35] transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05] group-hover:grayscale-0"
               />
-              <div className="pointer-events-none absolute inset-0" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.09)'}} />
+              <div className="pointer-events-none absolute inset-0" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)'}} />
             </figure>
           );
         })}
       </div>
 
-      <p className="mt-6 max-w-[52ch] font-mono text-[10.5px] tracking-[0.12em] text-white/50 edge">
+      <p className="mt-6 max-w-[52ch] font-mono text-[10.5px] tracking-[0.12em] t-3 edge">
         Feed imagery is placeholder
       </p>
-    </section>
+    </Ground>
   );
 }
