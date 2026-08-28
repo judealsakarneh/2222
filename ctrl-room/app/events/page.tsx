@@ -26,7 +26,7 @@ export default function EventsPage() {
         lede="Five recurring formats built to earn the CTRL Room name, so that eventually the line reads &ldquo;CTRL Room presents&rdquo;. That is credibility pure sponsorship cannot buy."
       />
 
-      <Act act="light" className="!pt-[var(--gap-act)]">
+      <Act act="dark" className="!pt-[var(--gap-act)]">
         <Wrap>
           <div className="max-w-[46rem]">
             <DisplayHeadline className="text-[clamp(2rem,4.8vw,3.4rem)] leading-[1.05]">

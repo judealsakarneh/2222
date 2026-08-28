@@ -60,7 +60,7 @@ export default function BusinessPage() {
         </Wrap>
       </Act>
 
-      <Act act="light">
+      <Act act="dark">
         <Wrap>
           <div className="max-w-[46rem]">
             <DisplayHeadline className="text-[clamp(2rem,4.8vw,3.4rem)] leading-[1.05]">
@@ -77,7 +77,7 @@ export default function BusinessPage() {
         </Wrap>
       </Act>
 
-      <Act act="light" className="!pt-0">
+      <Act act="dark" className="!pt-0">
         <Wrap>
           <div
             className="grid gap-10 border-t pt-[var(--gap-block)] lg:grid-cols-12"

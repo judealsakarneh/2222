@@ -58,7 +58,7 @@ export default function IndexPage() {
         </Wrap>
       </Act>
 
-      <Act act="light">
+      <Act act="dark">
         <Wrap>
           <div className="grid gap-14 lg:grid-cols-12">
             <div className="lg:col-span-5">

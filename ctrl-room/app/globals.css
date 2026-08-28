@@ -53,19 +53,6 @@
   --scroll-track: rgba(255, 255, 255, 0.04);
 }
 
-[data-act='light'] {
-  --fg: #151515;
-  --fg-2: rgba(21, 21, 21, 0.68);
-  --fg-3: rgba(21, 21, 21, 0.66);
-  --line: rgba(21, 21, 21, 0.14);
-  --line-strong: rgba(21, 21, 21, 0.26);
-  --surface: rgba(255, 255, 255, 0.72);
-  --accent: #007e7c;
-  --on-accent: #ffffff;
-  --scroll-thumb: rgba(21, 21, 21, 0.22);
-  --scroll-track: rgba(21, 21, 21, 0.05);
-}
-
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;
@@ -120,10 +107,6 @@
   ::selection {
     background: rgba(0, 212, 212, 0.30);
     color: #fff;
-  }
-  [data-act='light'] ::selection {
-    background: rgba(0, 126, 124, 0.22);
-    color: #151515;
   }
 
   :focus-visible {
@@ -217,15 +200,7 @@
     --accent: #00d4d4;
     --on-accent: #06201f;
   }
-  :root[data-act-now='light'] .site-header {
-    --hdr-fg: #151515;
-    --hdr-fg-2: rgba(21, 21, 21, 0.64);
-    --hdr-line: rgba(21, 21, 21, 0.14);
-    --hdr-bg: rgba(242, 243, 243, 0.9);
-    --accent: #007e7c;
-    --on-accent: #ffffff;
   }
-}
 
 @layer utilities {
   .nums {

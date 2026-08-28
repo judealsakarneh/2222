@@ -93,7 +93,7 @@ export default function Home() {
       </Act>
 
       {/* ACT II - light. The ground has been warming through the section above. */}
-      <Act act="light">
+      <Act act="dark">
         <Wrap>
           <div className="max-w-[46rem]">
             <DisplayHeadline className="text-[clamp(2rem,4.4vw,3.2rem)] leading-[1.04]">
@@ -110,7 +110,7 @@ export default function Home() {
         </Wrap>
       </Act>
 
-      <Act act="light" className="!pt-0">
+      <Act act="dark" className="!pt-0">
         <Wrap>
           <div className="max-w-[46rem]">
             <DisplayHeadline className="text-[clamp(2rem,4.4vw,3.2rem)] leading-[1.04]">

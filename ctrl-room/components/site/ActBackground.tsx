@@ -2,8 +2,22 @@
 
 import {useEffect} from 'react';
 
-const INK: [number, number, number] = [18, 18, 18];
-const PAPER: [number, number, number] = [242, 243, 243];
+/**
+ * Two DARK grounds, not a dark and a light one.
+ *
+ * The page used to cross from near-black to paper, and that is where the bug
+ * lived: a section's `data-act` flips its text tokens the instant its boundary
+ * crosses, while this layer takes most of a viewport to follow. On desktop the
+ * gap fell in empty transition runway. On a phone, where sections are tall and
+ * text-dense, it fell in the middle of a paragraph and rendered near-black type
+ * on a near-black ground.
+ *
+ * The reference design system is dark throughout, so the light act is gone. The
+ * crossfade survives as a subtle elevation drift, which reads as depth and
+ * cannot desynchronise from anything, because no text colour depends on it.
+ */
+const BASE: [number, number, number] = [18, 18, 18];
+const RAISED: [number, number, number] = [23, 23, 24];
 
 /** Blend band, in viewport heights. The crossfade happens across this much
  *  scroll either side of an act boundary. Wide enough to feel like a dissolve,
@@ -61,24 +75,19 @@ export function ActBackground() {
       // Walk the boundaries in order, easing toward each act as its boundary
       // passes. Because they are ordered, the accumulated result is the colour
       // for this scroll position with every crossfade already applied.
-      let c: [number, number, number] = acts[0].light ? PAPER : INK;
+      let c: [number, number, number] = acts[0].light ? RAISED : BASE;
       for (let i = 1; i < acts.length; i++) {
         const t = smooth(clamp01((y - (acts[i].top - band / 2)) / band));
         if (t <= 0) break;
-        const target = acts[i].light ? PAPER : INK;
+        const target = acts[i].light ? RAISED : BASE;
         c = [lerp(c[0], target[0], t), lerp(c[1], target[1], t), lerp(c[2], target[2], t)];
       }
       layer.style.backgroundColor = `rgb(${c[0]|0} ${c[1]|0} ${c[2]|0})`;
 
       // Which act sits under the header right now.
-      const hy = window.scrollY + 90;
-      let light = acts[0].light;
-      for (const a of acts) if (hy >= a.top) light = a.light;
-      root.dataset.actNow = light ? 'light' : 'dark';
-      // Keep the browser UI (iOS status bar, overscroll) in step.
-      document
-        .querySelector('meta[name="theme-color"]')
-        ?.setAttribute('content', light ? '#F2F3F3' : '#121212');
+      // The page is one temperature now, so the header never inverts and the
+      // browser UI stays put.
+      root.dataset.actNow = 'dark';
     };
 
     const onScroll = () => {
