@@ -62,13 +62,13 @@ const html = `<title>CTRL Room</title>
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 
 <style>
 :root { --font-display: 'Archivo'; --font-geist-sans: 'Geist'; --font-geist-mono: 'Geist Mono'; }
 html, body {
-  background: #121212;
-  font-family: 'Manrope', var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #0B0B0B;
+  font-family: 'Archivo', var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 </style>
 

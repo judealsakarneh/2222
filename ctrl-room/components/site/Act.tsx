@@ -29,7 +29,7 @@ export function Act({
     <section
       id={id}
       data-act={act}
-      className={`relative ${bleed ? '' : 'py-[var(--gap-act)]'} ${className}`}
+      className={`relative ${bleed ? '' : 'py-[calc(var(--gap-act)/2)]'} ${className}`}
       style={{color: 'var(--fg)'}}
     >
       {children}

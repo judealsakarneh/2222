@@ -17,10 +17,25 @@
  */
 
 :root {
-  --ink: #121212;
-  --paper: #f2f3f3;
-  --teal: #00d4d4;
-  --teal-bright: #00d4d4;
+  /* Brand palette, fixed by the brief. #151515 near black, #FFFFFF, #006563
+     CTRL Teal, plus the sanctioned tonal steps.
+
+     One derived tone: --teal-lit. #006563 on #0B0B0B measures 2.85:1, which
+     fails WCAG at every size, so brand teal cannot carry type on the dark
+     ground. --teal-lit is the same hue lightened until it clears AA (5.29:1),
+     and it is used ONLY for teal type. Solid teal fills keep #006563 exactly,
+     where white on teal measures 6.90:1. */
+  --black: #0b0b0b;
+  --ink: #101010;
+  --ink-2: #151515;
+  --ink-3: #1c1c1c;
+  --ink-4: #252525;
+  --white: #ffffff;
+  --grey-1: #ededed;
+  --grey-2: #b5b5b5;
+  --teal: #006563;
+  --teal-lit: #009491;
+  --paper: #ededed;
 
   /* The one curve. Pinned by the brief; a strong ease-out that leaves
      immediately and settles long. Nothing on this site is linear. */
@@ -42,13 +57,15 @@
 
 [data-act='dark'] {
   --fg: #ffffff;
-  --fg-2: #a1a1aa;
-  --fg-3: rgba(255, 255, 255, 0.52);
-  --line: #2a2a2c;
-  --line-strong: #3a3a3d;
-  --surface: #1c1c1e;
-  --accent: #00d4d4;
-  --on-accent: #06201f;
+  --fg-2: #b5b5b5;
+  --fg-3: rgba(237, 237, 237, 0.55);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --surface: #151515;
+  --surface-2: #1c1c1c;
+  --accent: #009491;
+  --accent-solid: #006563;
+  --on-accent: #ffffff;
   --scroll-thumb: rgba(255, 255, 255, 0.16);
   --scroll-track: rgba(255, 255, 255, 0.04);
 }
@@ -87,14 +104,17 @@
     background-clip: content-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent, #00d4d4);
+    background: var(--accent, #009491);
     background-clip: content-box;
   }
 
   body {
     color: #fff;
-    font-family: 'Manrope Variable', var(--font-geist-sans), system-ui, sans-serif;
-    caret-color: var(--accent, #00d4d4);
+    /* The page ground. ActBackground used to paint this; the site is one
+       temperature now, so the body carries it directly. */
+    background-color: #0b0b0b;
+    font-family: 'Archivo Variable', 'Archivo', var(--font-geist-sans), system-ui, sans-serif;
+    caret-color: var(--accent, #009491);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -105,12 +125,12 @@
   }
 
   ::selection {
-    background: rgba(0, 212, 212, 0.30);
+    background: rgba(0, 148, 145, 0.30);
     color: #fff;
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent, #00d4d4);
+    outline: 2px solid var(--accent, #009491);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -197,7 +217,7 @@
     --hdr-fg-2: rgba(255, 255, 255, 0.62);
     --hdr-line: rgba(255, 255, 255, 0.12);
     --hdr-bg: rgba(18, 18, 18, 0.88);
-    --accent: #00d4d4;
+    --accent: #009491;
     --on-accent: #06201f;
   }
   }
@@ -209,7 +229,7 @@
 
   /* Display type. Archivo only, and only here. */
   .display {
-    font-family: var(--font-geist-sans), var(--font-display), sans-serif;
+    font-family: 'Archivo Variable', 'Archivo', var(--font-geist-sans), sans-serif;
     font-weight: 800;
     letter-spacing: -0.04em;
     text-wrap: balance;
@@ -228,4 +248,14 @@
     padding-left: var(--edge);
     padding-right: var(--edge);
   }
+}
+
+/* The rails carry their own arrows and the page has its own rhythm, so the
+   native scrollbar under a rail is noise. Scrolling itself is untouched. */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }

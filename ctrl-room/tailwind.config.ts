@@ -24,10 +24,9 @@ const config: Config = {
           500: '#333333',
         },
         teal: {
-          DEFAULT: '#00D4D4', // reference accent
-          bright: '#00D4D4',
-          light: '#5BE9E9',
-          deep: '#006563', // the deck value, kept for fills on light grounds
+          DEFAULT: '#006563', // brand teal, for fills carrying white type
+          lit: '#009491',     // same hue lightened to clear AA as type on dark
+          deep: '#00403F',
         },
         paper: {
           DEFAULT: '#F2F3F3', // light-act ground, cooled off pure white
@@ -40,7 +39,7 @@ const config: Config = {
         // Geist Sans is the voice of the site. Archivo is reserved for display
         // scale only, where its variable width axis does work Geist cannot.
         sans: ['Manrope Variable', 'var(--font-geist-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['var(--font-geist-sans)', 'var(--font-display)', 'sans-serif'],
+        display: ['Archivo Variable', 'Archivo', 'var(--font-geist-sans)', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       letterSpacing: {

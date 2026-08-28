@@ -7,9 +7,8 @@
  * which the shim in ./shim replaces so all six routes work inside one file.
  */
 import {createRoot} from 'react-dom/client';
-import {ActBackground} from '../components/site/ActBackground';
-import {Footer} from '../components/site/Footer';
-import {Header} from '../components/site/Header';
+import {Footer} from '../components/footer/Footer';
+import {Nav} from '../components/navigation/Nav';
 import {usePathname} from './shim/router';
 
 import Home from '../app/page';
@@ -33,8 +32,7 @@ function Site() {
   const Page = ROUTES[path] ?? Home;
   return (
     <>
-      <ActBackground />
-      <Header />
+      <Nav />
       {/* Keyed so a route change remounts the page and every scroll-driven
           value re-measures against the new document. */}
       <main className="relative" key={path}>

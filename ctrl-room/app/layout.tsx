@@ -2,11 +2,10 @@ import type {Metadata, Viewport} from 'next';
 import {Archivo} from 'next/font/google';
 import {GeistSans} from 'geist/font/sans';
 import {GeistMono} from 'geist/font/mono';
-import '@fontsource-variable/manrope';
+import '@fontsource-variable/archivo';
 import './globals.css';
-import {Header} from '@/components/site/Header';
-import {Footer} from '@/components/site/Footer';
-import {ActBackground} from '@/components/site/ActBackground';
+import {Nav} from '@/components/navigation/Nav';
+import {Footer} from '@/components/footer/Footer';
 
 /**
  * Three roles, and each one earns its place.
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#121212',
+  themeColor: '#0B0B0B',
   colorScheme: 'dark',
 };
 
@@ -54,8 +53,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable}`}
     >
       <body className="font-sans antialiased">
-        <ActBackground />
-        <Header />
+        <Nav />
         <main className="relative">{children}</main>
         <Footer />
       </body>
