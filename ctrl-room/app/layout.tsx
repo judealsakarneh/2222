@@ -2,6 +2,7 @@ import type {Metadata, Viewport} from 'next';
 import {Archivo} from 'next/font/google';
 import {GeistSans} from 'geist/font/sans';
 import {GeistMono} from 'geist/font/mono';
+import '@fontsource-variable/manrope';
 import './globals.css';
 import {Header} from '@/components/site/Header';
 import {Footer} from '@/components/site/Footer';
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0B0B0B',
+  themeColor: '#121212',
   colorScheme: 'dark',
 };
 

@@ -2,7 +2,7 @@
 
 import {useEffect} from 'react';
 
-const INK: [number, number, number] = [11, 11, 11];
+const INK: [number, number, number] = [18, 18, 18];
 const PAPER: [number, number, number] = [242, 243, 243];
 
 /** Blend band, in viewport heights. The crossfade happens across this much
@@ -78,7 +78,7 @@ export function ActBackground() {
       // Keep the browser UI (iOS status bar, overscroll) in step.
       document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute('content', light ? '#F2F3F3' : '#0B0B0B');
+        ?.setAttribute('content', light ? '#F2F3F3' : '#121212');
     };
 
     const onScroll = () => {
@@ -121,7 +121,7 @@ export function ActBackground() {
       id="act-bg"
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10"
-      style={{backgroundColor: '#0B0B0B'}}
+      style={{backgroundColor: '#121212'}}
     >
       {/* Grain sits on the ground, once, for the whole document. Applied
           per-section it lifts that section by ~3% and leaves a visible seam at

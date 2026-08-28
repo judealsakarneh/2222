@@ -125,7 +125,7 @@ export function Header() {
         className={`fixed inset-0 z-40 transition-opacity duration-300 lg:hidden ${
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
-        style={{background: '#0B0B0B'}}
+        style={{background: '#121212'}}
       >
         <nav
           className="mx-auto flex h-full max-w-content flex-col justify-center gap-1 edge"

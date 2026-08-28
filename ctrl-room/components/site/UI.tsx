@@ -82,14 +82,14 @@ export function Stat({
   source?: string;
 }) {
   return (
-    <div className="border-t pt-6" style={{borderColor: 'var(--line)'}}>
+    <div className="border-t pt-8" style={{borderColor: 'var(--line)'}}>
       <div
         className="measure text-[clamp(1.75rem,3.6vw,2.5rem)] font-medium leading-none tracking-[-0.02em]"
         style={{color: 'var(--fg)'}}
       >
         {value}
       </div>
-      <div className="mt-4 max-w-[28ch] text-[14px] leading-[1.55]" style={{color: 'var(--fg-2)'}}>
+      <div className="mt-5 max-w-[28ch] text-[14.5px] leading-[1.6]" style={{color: 'var(--fg-2)'}}>
         {label}
       </div>
       {source ? (
@@ -123,7 +123,7 @@ export function Rows({
       {items.map((it, i) => (
         <li key={it.title}>
           <div
-            className="group grid grid-cols-1 gap-x-8 gap-y-2 border-t py-8 transition-colors duration-[160ms] md:grid-cols-12 md:py-10"
+            className="group grid grid-cols-1 gap-x-12 gap-y-4 border-t py-12 transition-colors duration-[160ms] md:grid-cols-12 md:py-16"
             style={{borderColor: 'var(--line)'}}
           >
             {numbered ? (

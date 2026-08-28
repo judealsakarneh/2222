@@ -26,7 +26,7 @@ export default function Home() {
       {/* ACT I - dark. The masthead. */}
       <Act act="dark" className="!pb-0 pt-[132px] sm:pt-[150px]">
         <Wrap>
-          <div className="grid items-end gap-14 lg:grid-cols-12 lg:gap-10">
+          <div className="grid items-center gap-20 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
               <StatusLine />
               <div className="mt-8">
@@ -41,11 +41,11 @@ export default function Home() {
                   <span className="accent">switched on.</span>
                 </DisplayHeadline>
               </div>
-              <Lede className="mt-8">
+              <Lede className="mt-10">
                 Where to go, what is on this weekend, who is hiring, and the
                 membership that gets you in.
               </Lede>
-              <div className="mt-12 flex flex-wrap gap-4">
+              <div className="mt-14 flex flex-wrap gap-4">
                 <Action href="/membership#join">Join the room</Action>
                 <Action href="/business" tone="ghost">
                   CTRL Room for Business
@@ -70,7 +70,7 @@ export default function Home() {
       {/* ACT I continued, the market case. */}
       <Act act="dark">
         <Wrap>
-          <div className="grid gap-12 lg:grid-cols-12">
+          <div className="grid gap-16 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <DisplayHeadline className="text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.05]">
                 Young, mobile, and already scrolling.
@@ -82,7 +82,7 @@ export default function Home() {
                 before the regional platforms saturate it.
               </Lede>
             </div>
-            <div className="grid gap-10 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">
+            <div className="grid gap-x-12 gap-y-14 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">
               <Stat value="11.6M" label="Population, 2026 - median age 24.9" source="Worldometer" />
               <Stat value="92.5%" label="Internet penetration - 10.7M users" source="DataReportal" />
               <Stat value="6.8M" label="Social media users - 59% of the population" source="DataReportal" />
@@ -130,7 +130,7 @@ export default function Home() {
       {/* ACT III - back to dark for the membership. */}
       <Act act="dark">
         <Wrap>
-          <div className="grid items-center gap-16 lg:grid-cols-12 lg:gap-12">
+          <div className="grid items-center gap-20 lg:grid-cols-12 lg:gap-16">
             <div className="order-2 lg:order-1 lg:col-span-6">
               <CardStage
                 className="mx-auto w-full max-w-[460px] lg:max-w-none"

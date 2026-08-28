@@ -44,7 +44,7 @@ export function MemberCard({
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(148deg, #0C918C 0%, #007370 32%, #005250 66%, #00302F 100%)',
+              'linear-gradient(148deg, #16C4C4 0%, #009C9B 32%, #00706F 66%, #003E3E 100%)',
           }}
         />
 
