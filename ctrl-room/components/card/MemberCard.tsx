@@ -121,7 +121,7 @@ export function MemberCard({
 
         {overlay}
 
-        {/* The edge — a bright top-left catch over a full hairline. */}
+        {/* The edge: a bright top-left catch over a full hairline. */}
         <div
           className="pointer-events-none absolute inset-0 rounded-[4.2cqw]"
           style={{

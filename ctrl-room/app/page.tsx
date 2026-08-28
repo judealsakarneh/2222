@@ -110,19 +110,27 @@ export default function Home() {
         </Wrap>
       </Act>
 
+      {/* Asymmetric split, deliberately unlike the section above it: the
+          heading holds still in a narrow column while the pillars run past it.
+          Two ledger sections stacked with the same intro-then-rows shape read
+          as one long template, which is the loudest tell a page is generated. */}
       <Act act="dark" className="!pt-0">
         <Wrap>
-          <div className="max-w-[46rem]">
-            <DisplayHeadline className="text-[clamp(2rem,4.4vw,3.2rem)] leading-[1.04]">
-              Five pillars that build a daily habit.
-            </DisplayHeadline>
-            <Lede className="mt-6">
-              Together these turn CTRL Room from an account you follow into a
-              media brand you check.
-            </Lede>
-          </div>
-          <div className="mt-[var(--gap-block)]">
-            <Rows items={PILLARS} />
+          <div className="grid gap-x-16 gap-y-12 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <div className="lg:sticky lg:top-[132px]">
+                <DisplayHeadline className="text-[clamp(2rem,4.4vw,3.2rem)] leading-[1.04]">
+                  Five pillars that build a daily habit.
+                </DisplayHeadline>
+                <Lede className="mt-6">
+                  Together these turn CTRL Room from an account you follow into
+                  a media brand you check.
+                </Lede>
+              </div>
+            </div>
+            <div className="lg:col-span-7 lg:col-start-6">
+              <Rows items={PILLARS} />
+            </div>
           </div>
         </Wrap>
       </Act>
