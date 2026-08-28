@@ -1,5 +1,6 @@
 import {CardStage} from '@/components/card/CardStage';
 import {Act, Wrap} from '@/components/site/Act';
+import {Featured, Lists} from '@/components/site/Photo';
 import {StatusLine} from '@/components/site/StatusLine';
 import {Ticker} from '@/components/site/Ticker';
 import {Action, Lede, Reveal, Rows, Stat, Title} from '@/components/site/UI';
@@ -18,6 +19,15 @@ const PILLARS = [
   {n: '03', title: 'Career Room', body: 'Companies hiring, salary insights, startups, workplace culture, LinkedIn trends.'},
   {n: '04', title: "What's On", body: 'Events, concerts, exhibitions, pop-ups, networking, sports, festivals.'},
   {n: '05', title: 'CTRL Intelligence', body: "Why everyone's talking about X - the things worth knowing this week."},
+];
+
+
+// Nightlife carries the band above, so it is deliberately absent here: the
+// same photograph twice in one screenful reads as a thin library.
+const LISTS = [
+  {src: '/img/restaurant.webp', title: 'Dinner, when it matters', count: '22 places', href: '/membership'},
+  {src: '/img/cafe.webp', title: 'Coffee worth the drive', count: '18 places', href: '/membership'},
+  {src: '/img/food.webp', title: 'Mezze done properly', count: '11 places', href: '/membership'},
 ];
 
 export default function Home() {
@@ -131,6 +141,24 @@ export default function Home() {
             <div className="lg:col-span-7 lg:col-start-6">
               <Rows items={PILLARS} />
             </div>
+          </div>
+        </Wrap>
+      </Act>
+
+      {/* A full-width media band. After two ledger sections the page needs a
+          change of register, and this is the archetype that resets rhythm. */}
+      <Act act="dark">
+        <Wrap>
+          <Featured
+            src="/img/nightlife.webp"
+            eyebrow="Featured"
+            title="Late nights. Good people. Real energy."
+            body="The city fills up after ten. We keep track of where, so you are not guessing on a Thursday."
+            href="/events"
+            cta="Explore tonight"
+          />
+          <div className="mt-[var(--gap-block)]">
+            <Lists items={LISTS} href="/membership" />
           </div>
         </Wrap>
       </Act>

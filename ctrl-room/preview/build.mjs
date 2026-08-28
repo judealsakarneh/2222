@@ -82,5 +82,22 @@ ${js}
 </script>
 `;
 
-await writeFile(out, html);
+// The artifact is one self-contained file opened from disk, so it has no
+// server to fetch /img/*.webp from. Inline every referenced photograph as a
+// data URI. They are already compressed for their slots, so this costs a few
+// tens of KB, not megabytes.
+const imgDir = resolve(root, 'public/img');
+let inlined = html;
+const refs = [...new Set([...html.matchAll(/\/img\/([A-Za-z0-9_-]+)\.webp/g)].map(m => m[1]))];
+for (const name of refs) {
+  const bytes = await readFile(resolve(imgDir, `${name}.webp`));
+  const uri = `data:image/webp;base64,${bytes.toString('base64')}`;
+  inlined = inlined.split(`/img/${name}.webp`).join(uri);
+}
+if (refs.length) {
+  const kb = Math.round((Buffer.byteLength(inlined) - Buffer.byteLength(html)) / 1024);
+  console.log(`  inlined ${refs.length} image(s), +${kb} KB`);
+}
+
+await writeFile(out, inlined);
 console.log(`${out}  ${(html.length / 1024).toFixed(0)} KB`);
