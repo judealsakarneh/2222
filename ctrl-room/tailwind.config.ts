@@ -42,6 +42,29 @@ const config: Config = {
         display: ['Archivo Variable', 'Archivo', 'var(--font-geist-sans)', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
+      transitionTimingFunction: {
+        /**
+         * The house curve, as the default.
+         *
+         * cubic-bezier(0.22, 1, 0.36, 1) - fast start, long settle, zero
+         * bounce. It is what every seam, reveal and hover on this site was
+         * meant to use, and it is what the CTRL Room films use, which is the
+         * reason the site and the films move alike.
+         *
+         * Overriding DEFAULT rather than adding a named utility is deliberate.
+         * Twenty-three transitions on this site had a duration and no curve, so
+         * they silently ran on Tailwind's own cubic-bezier(0.4, 0, 0.2, 1) - a
+         * symmetric ease that starts slowly and gives UI movement a soft,
+         * approximate feel. Adding an opt-in utility would have fixed the
+         * twenty-three and not the twenty-fourth. Changing the default fixes
+         * the ones nobody has written yet.
+         */
+        DEFAULT: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        /** Symmetric, for anything that both starts and stops on screen. */
+        io: 'cubic-bezier(0.65, 0, 0.35, 1)',
+        /** Exits. Slower to release than to arrive. */
+        exit: 'cubic-bezier(0.55, 0, 1, 0.45)',
+      },
       letterSpacing: {
         // Craft floor puts the tracking floor at -0.04em. Nothing goes tighter.
         display: '-0.04em',

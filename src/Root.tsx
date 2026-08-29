@@ -10,6 +10,8 @@ import {ZambleQuad} from './ZambleQuad';
 import {ZambleDemo} from './ZambleDemo';
 import {CtrlPromo} from './CtrlPromo';
 import {CtrlReel} from './CtrlReel';
+import {CtrlFlow} from './CtrlFlow';
+import {DURATION as FLOW_DURATION} from './flow/lib/timeline';
 import {DURATION as REEL_DURATION} from './reel/tokens';
 import {DURATION as CTRL_DURATION} from './ctrl/lib/tokens';
 import {DURATION as DEMO_DURATION} from './demo/lib/timeline';
@@ -23,6 +25,17 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* CTRL Room — "Flow". UI product film on the Wispr Flow beat sheet.
+          1920x1080, 12.000s. */}
+      <Composition
+        id="CtrlFlow"
+        component={CtrlFlow}
+        durationInFrames={FLOW_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
       {/* CTRL Room — 16:9 motion reel. 150 frames / 5.000s. */}
       <Composition
         id="CtrlReel"

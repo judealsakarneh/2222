@@ -1,13 +1,13 @@
-import {loadFont} from '@remotion/google-fonts/JetBrainsMono';
+import {MONO as VENDORED_MONO} from '../../lib/fonts';
 
 /**
  * One face for the whole teaser. JetBrains Mono is the terminal look, and a
  * monospace advance is what makes the ASCII art render as a grid rather than as
  * ragged text.
  *
- * Subsets pinned to latin — unpinned, every subset of every weight is fetched.
+ * It now comes from the project's vendored faces in src/lib/fonts.ts rather
+ * than from @remotion/google-fonts. This was the last module fetching a font at
+ * render time, and because every composition ends up in one bundle, that single
+ * import was enough to make every render in the project depend on the network.
  */
-export const {fontFamily: MONO} = loadFont('normal', {
-  weights: ['400', '700', '800'],
-  subsets: ['latin'],
-});
+export const MONO = VENDORED_MONO;
