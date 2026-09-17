@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
-import {C, COPY, FONT, LEDGER} from '../lib/brand';
+import {C, COPY, FILLER_ROWS, FONT, LEDGER} from '../lib/brand';
 import {progressAt} from '../lib/progress';
 import {
   BEATS,
@@ -16,13 +16,8 @@ import {
   ms,
 } from '../lib/timeline';
 
-/** PLACEHOLDER filler rows. Never a real customer name or a real amount. */
-const FILLER = [
-  {who: 'Placeholder Studio', amt: '$96.00', state: 'Paid'},
-  {who: 'Placeholder Labs', amt: '$412.00', state: 'Paid'},
-  {who: 'Placeholder Co', amt: '$129.00', state: 'Paid'},
-  {who: 'Placeholder GmbH', amt: '$248.00', state: 'Paid'},
-];
+/** The quiet rows. Fictional names, held in brand.ts with everything else. */
+const FILLER = FILLER_ROWS;
 
 const mono = (size: number, color: string): React.CSSProperties => ({
   fontFamily: FONT.mono,
@@ -183,7 +178,7 @@ export const Dashboard: React.FC = () => {
               fontFamily: FONT.ui,
               fontWeight: 600,
               fontSize: 14,
-              color: connect > 0.5 ? C.green : '#FFFFFF',
+              color: connect > 0.5 ? C.greenLit : '#FFFFFF',
               whiteSpace: 'nowrap',
             }}
           >

@@ -34,7 +34,7 @@ const Pill: React.FC<{tone: 'idle' | 'failed' | 'recovered'; p: number}> = ({ton
   const map = {
     idle: {bg: 'transparent', fg: C.fg3, label: 'Processing'},
     failed: {bg: C.redSoft, fg: C.redLit, label: 'Failed'},
-    recovered: {bg: C.greenSoft, fg: C.green, label: 'Recovered'},
+    recovered: {bg: C.greenSoft, fg: C.greenLit, label: 'Recovered'},
   } as const;
   const m = map[tone];
   return (
@@ -258,7 +258,8 @@ export const MorphRow: React.FC = () => {
               color: C.fg,
             }}
           >
-            {/* PLACEHOLDER — replace with the real recovery email subject. */}
+            {/* Written here, not quoted from Revorva. Their own subject line
+                will be better - this is the shape it needs to be. */}
             Your payment didn&rsquo;t go through
           </div>
           <div
@@ -267,12 +268,32 @@ export const MorphRow: React.FC = () => {
               fontSize: 17,
               lineHeight: 1.6,
               color: C.fg2,
-              maxWidth: '58ch',
+              // 64ch, not 58. At 58 the sentence broke three ways and left
+              // "it." alone on the last line, which is the one thing a two-line
+              // paragraph must not do.
+              maxWidth: '64ch',
             }}
           >
-            {/* PLACEHOLDER — replace with the real email body. */}
-            We tried {LEDGER.amount} for {LEDGER.plan} and the card was declined.
-            One tap sorts it.
+            We tried {LEDGER.amount} for {LEDGER.plan}. The card was declined,
+            and one tap fixes it.
+          </div>
+
+          {/* The decline detail. It fills the dead space the short body left
+              above the button, and it is the line that makes the email read as
+              a real notification rather than a mock of one: this is what the
+              customer actually needs to know. 4242 is Stripe's published test
+              card, which this audience reads as a test on sight. */}
+          <div
+            style={{
+              ...mono(13, C.fg3),
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+            }}
+          >
+            <span>{LEDGER.card}</span>
+            <span style={{opacity: 0.5}}>·</span>
+            <span>{LEDGER.declineCode}</span>
           </div>
           <div
             style={{
@@ -418,11 +439,11 @@ export const SentChip: React.FC = () => {
           fontFamily: FONT.ui,
           fontWeight: 600,
           fontSize: 14,
-          color: C.green,
+          color: C.greenLit,
           whiteSpace: 'nowrap',
         }}
       >
-        <span style={{width: 6, height: 6, borderRadius: 3, background: C.green}} />
+        <span style={{width: 6, height: 6, borderRadius: 3, background: C.greenLit}} />
         Recovery email sent
       </span>
     </div>
