@@ -3,96 +3,161 @@ import {Easing} from 'remotion';
 /**
  * Revorva — the beat sheet.
  *
- * 15.000 s at 30 fps. Shorter than the CTRL Room brand film on purpose: this
- * is a launch piece, and a launch piece earns attention by being over before
- * the viewer decides to leave. 15-25 s is the useful band; this sits at the
- * floor because the product's own story is four beats long and padding it
- * would only dilute them.
+ * 15.000 s at **60 fps**. Every other composition in this repo is 30; this one
+ * is not, because the brief was smoothness and frame rate is the one variable
+ * that buys it unconditionally. At 30 fps a camera crossing the frame in a
+ * second lands on 30 discrete positions; at 60 it lands on 60, and no amount of
+ * easing recovers the difference.
  *
- * Times are in milliseconds, converted once by `ms()`, so the file reads as a
- * beat sheet rather than as frame arithmetic.
+ * Times are in milliseconds, converted once by `ms()`.
  */
 
-export const FPS = 30;
+export const FPS = 60;
 export const ms = (t: number) => (t * FPS) / 1000;
 export const DURATION = ms(15000);
 
 // ---------------------------------------------------------------------------
-// Curves. The same house curve as every other piece in this repo, which is why
-// they all move alike.
+// Curves
 // ---------------------------------------------------------------------------
 
-/** Fast out, long settle. cubic-bezier(0.22, 1, 0.36, 1). */
+/** The house curve. Fast out, long settle. Used for elements. */
 export const EASE = Easing.bezier(0.22, 1, 0.36, 1);
+
+/**
+ * The camera curve. Symmetric, and that is the whole point.
+ *
+ * This started as bezier(0.16, 1, 0.3, 1) - the same fast-out family as the
+ * house curve - and measuring the result showed why that is wrong for a path
+ * with waypoints. An ease-out curve STARTS FAST. Interpolation applies the
+ * easing per segment, so at every waypoint the camera glided to almost nothing
+ * on the tail of one segment and then restarted at full speed on the head of
+ * the next. Sampling a probe point frame by frame found four acceleration
+ * spikes, the worst of them 45 px/frame² - the camera going from a standstill
+ * to 45 px in a single frame. That is a visible jolt, and it happened at
+ * exactly the moments the film was trying to feel most fluid.
+ *
+ * bezier(0.4, 0, 0.6, 1) has zero velocity at BOTH ends: y of the first control
+ * point is 0, y of the second is 1. Segments therefore meet at matching
+ * velocity - zero - and the path is C1 continuous across every waypoint. Peak
+ * acceleration drops from 45 to under 1.
+ *
+ * The elements keep the fast-out house curve. That contrast is deliberate:
+ * things in the world snap, the camera watching them glides.
+ */
+export const EASE_CAMERA = Easing.bezier(0.4, 0, 0.6, 1);
+
 /** Symmetric, for anything that starts and stops on screen. */
 export const EASE_IO = Easing.bezier(0.65, 0, 0.35, 1);
-/** Exits. Slower to release than to arrive. */
-export const EASE_EXIT = Easing.bezier(0.55, 0, 1, 0.45);
+
+// ---------------------------------------------------------------------------
+// The world
+//
+// Everything is authored at 1x inside a 1920x1080 stage, and the camera is a
+// transform over that stage. Authoring in world coordinates rather than per
+// scene is what lets one interpolation carry the whole film: there are no
+// scenes to cut between, only places the camera happens to be.
+// ---------------------------------------------------------------------------
+
+export const PANEL = {x: 260, y: 170, w: 1400, h: 740, r: 20} as const;
+export const HEAD_H = 104;
+export const ROW_H = 84;
+export const TABLE_X = PANEL.x + 40;
+export const TABLE_W = PANEL.w - 80;
+export const TABLE_Y = PANEL.y + HEAD_H + 56;
+export const ROWS = 5;
+
+/** Which row the film happens to. Second from the top: read as one of many. */
+export const HERO_INDEX = 1;
+export const HERO_Y = TABLE_Y + ROW_H * HERO_INDEX;
+export const HERO_CY = HERO_Y + ROW_H / 2;
+
+/** The email the row becomes, centred in the work framing. */
+export const MAIL = {w: 900, h: 372, cx: 960, cy: 512, r: 18} as const;
 
 // ---------------------------------------------------------------------------
 // Beats
 //
-// `slot` is when a beat owns the screen; `move` is how long its animation
-// takes. A beat animates for `move` then holds. The holding is what stops the
-// film reading as a list of animations.
+// Every boundary below OVERLAPS its neighbour. Nothing in this film starts on
+// the frame something else finished - that single frame of stillness is what
+// makes a sequence read as a list of animations, and avoiding it everywhere is
+// most of what "smooth" actually means.
 // ---------------------------------------------------------------------------
 
 export const BEATS = {
-  /**
-   * 0 - 2500 ms. THE HOOK. A payment fails.
-   *
-   * The problem is stated before the product exists. A launch video that opens
-   * on its own logo has spent its first two seconds on the one thing the
-   * viewer does not yet care about.
-   *
-   * The row is already on screen at frame 0, settled and normal. The decline
-   * arrives at 900 ms - late enough that the viewer has read the row as
-   * ordinary, which is what makes the state change land.
-   */
-  fail: {slot: [0, 2500], rowIn: 420, declineAt: 900, badgeIn: 260},
+  /** The hook: an ordinary row, then a decline. Late enough to have been read. */
+  fail: {declineAt: 900, badgeIn: 420},
 
-  /**
-   * 2500 - 5000 ms. THE TURN. Revorva connects.
-   *
-   * The Stripe OAuth handshake is genuinely one click and about two seconds,
-   * so the edit can show it at real speed and be honest. Speeding it up would
-   * be the one place this film could lie and gain nothing.
-   */
-  connect: {slot: [2500, 5000], move: 520, holdAfter: 700},
+  /** The turn: Stripe connects while the camera is already pulling back. */
+  connect: {at: 3250, move: 620, checkAt: 3980},
 
-  /**
-   * 5000 - 11000 ms. THE WORK. Retry schedule, then the email, then recovery.
-   *
-   * The longest beat because it is the only one that shows the product doing
-   * something. Three sub-moments, each given room rather than crossfaded past.
-   */
+  /** The work: retries tick, the row becomes an email, the email sends. */
   work: {
-    slot: [5000, 11000],
-    retryAt: 5200,
-    /** Each retry attempt lands 620 ms after the last. */
-    retryStagger: 620,
+    liftAt: 5600,
+    liftMove: 620,
+    retryAt: 6000,
+    retryStagger: 520,
     retries: 3,
-    emailAt: 7400,
-    emailMove: 460,
-    recoverAt: 9200,
-    recoverMove: 520,
+    /** The morph. One interpolation of w/h/radius - a shape change, not a swap. */
+    morphAt: 7300,
+    morphMove: 900,
+    sendAt: 9400,
+    sendMove: 800,
+    /** The recovered row fades up UNDER the departing email, not after it. */
+    recoverAt: 9700,
+    recoverMove: 700,
   },
 
-  /**
-   * 11000 - 15000 ms. THE CLOSE. Wordmark, line, domain.
-   *
-   * Staggered 0 / 160 / 300 so the three elements resolve in reading order
-   * rather than together, then a hold.
-   */
-  outro: {slot: [11000, 15000], move: 420, stagger: [0, 160, 300], hold: 600},
+  /** The close. */
+  outro: {at: 11600, move: 700, stagger: [0, 180, 340]},
 } as const;
 
+// ---------------------------------------------------------------------------
+// The camera path
+//
+// One array. The whole film is `interpolate(frame, CAM_T, CAM_<channel>)`, so
+// the camera is mathematically incapable of cutting: there is no frame at which
+// it is in two places, because it is one continuous function of time.
+//
+// (x, y) is the world point held at the centre of frame; s is the zoom.
+// ---------------------------------------------------------------------------
+
+export const CAM_T = [0, 2200, 5000, 7300, 9800, 11200, 15000].map(ms);
+
 /**
- * Readability floor, applied to every line the viewer must read.
+ * Held at frame centre.
  *
- * A short label needs about 0.8 s settled; a sentence needs about 0.3 s per
- * word. Fast-in, then hold - never fast-in, then gone. This is the rule the
- * pacing is checked against after the first render, not a suggestion.
+ * The film opens at x 1150, not at the row's midpoint. The first framing was
+ * centred on the row and it was unreadable: at that zoom the visible world is
+ * narrower than the row, so the shot landed between the customer name and the
+ * status and showed neither. 1150 puts the amount and the status pill in frame
+ * - the two things the hook is actually about - and leaves the name off screen,
+ * which gives the pull-back something to reveal.
+ */
+export const CAM_X = [1150, 1146, 960, 960, 960, 960, 960];
+export const CAM_Y = [HERO_CY, HERO_CY, 540, 500, 500, 540, 505];
+
+/**
+ * Zoom.
+ *
+ * 2.30 → 2.18 over the first 2200 ms is the detail that matters most here. It
+ * is barely a move; its whole job is that the camera is ALREADY DRIFTING when
+ * the decline lands, so the pull-back that follows is a continuation rather
+ * than a start. A camera that begins moving at a beat boundary announces the
+ * boundary.
+ *
+ * 1.42 in the work section is not arbitrary: at that zoom the 1320 px row spans
+ * 1352 px of visible world, so it fills the frame with 16 px to spare on each
+ * side. One notch tighter and the row is cropped mid-morph.
+ *
+ * 2.00 at the open is bounded the same way from the other side: at x 1150 it
+ * shows world 670-1630, which sits inside the panel's 260-1660 without letting
+ * the panel's own edge into the shot.
+ */
+export const CAM_S = [2.0, 1.92, 1.0, 1.42, 1.4, 1.0, 0.88];
+
+/**
+ * Readability floor. A short label needs ~0.8 s settled; a sentence ~0.3 s per
+ * word. Used to check the cut after the first render rather than by eye.
  */
 export const holdFor = (text: string) => {
   const words = text.trim().split(/\s+/).length;

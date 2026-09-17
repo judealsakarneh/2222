@@ -11,6 +11,8 @@ import {ZambleDemo} from './ZambleDemo';
 import {CtrlPromo} from './CtrlPromo';
 import {CtrlReel} from './CtrlReel';
 import {CtrlFlow} from './CtrlFlow';
+import {RevorvaFilm} from './RevorvaFilm';
+import {DURATION as REVORVA_DURATION, FPS as REVORVA_FPS} from './revorva/lib/timeline';
 import {DURATION as FLOW_DURATION} from './flow/lib/timeline';
 import {DURATION as REEL_DURATION} from './reel/tokens';
 import {DURATION as CTRL_DURATION} from './ctrl/lib/tokens';
@@ -25,6 +27,16 @@ import './style.css';
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* Revorva — one continuous take, no cuts. 1920x1080, 60fps, 15.000s. */}
+      <Composition
+        id="RevorvaFilm"
+        component={RevorvaFilm}
+        durationInFrames={REVORVA_DURATION}
+        fps={REVORVA_FPS}
+        width={1920}
+        height={1080}
+      />
+
       {/* CTRL Room — "Flow". UI product film on the Wispr Flow beat sheet.
           1920x1080, 12.000s. */}
       <Composition
