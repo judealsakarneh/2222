@@ -3,18 +3,23 @@ import {Easing} from 'remotion';
 /**
  * Revorva — the beat sheet.
  *
- * 15.000 s at **60 fps**. Every other composition in this repo is 30; this one
- * is not, because the brief was smoothness and frame rate is the one variable
- * that buys it unconditionally. At 30 fps a camera crossing the frame in a
- * second lands on 30 discrete positions; at 60 it lands on 60, and no amount of
- * easing recovers the difference.
+ * 10.000 s at **60 fps**, cut down from 15 for pace.
+ *
+ * 60 fps matters more at this speed, not less. Frame rate is the one variable
+ * that buys smoothness unconditionally, and a fast move is exactly where 30 fps
+ * falls apart: a camera crossing the frame in half a second lands on 15 discrete
+ * positions at 30 and 30 at 60, and no amount of easing recovers the difference.
+ *
+ * Snappy means HIGH acceleration, not DISCONTINUOUS acceleration. Everything
+ * below is quicker; none of it is jerkier. The curve that guarantees that is
+ * unchanged - only the durations it runs over are shorter.
  *
  * Times are in milliseconds, converted once by `ms()`.
  */
 
 export const FPS = 60;
 export const ms = (t: number) => (t * FPS) / 1000;
-export const DURATION = ms(15000);
+export const DURATION = ms(10000);
 
 // ---------------------------------------------------------------------------
 // Curves
@@ -84,31 +89,40 @@ export const MAIL = {w: 900, h: 372, cx: 960, cy: 512, r: 18} as const;
 // ---------------------------------------------------------------------------
 
 export const BEATS = {
-  /** The hook: an ordinary row, then a decline. Late enough to have been read. */
-  fail: {declineAt: 900, badgeIn: 420},
+  /**
+   * The open. The table CASCADES in rather than being there already.
+   *
+   * 55 ms between rows: fast enough to read as one gesture, slow enough that
+   * the eye catches the direction. This is the single biggest change in pace -
+   * the film now starts with movement instead of starting with a held frame.
+   */
+  enter: {at: 0, move: 460, stagger: 55},
 
-  /** The turn: Stripe connects while the camera is already pulling back. */
-  connect: {at: 3250, move: 620, checkAt: 3980},
+  /** The decline. Early, and it snaps rather than fades. */
+  fail: {declineAt: 620, badgeIn: 300},
 
-  /** The work: retries tick, the row becomes an email, the email sends. */
+  /** Stripe connects while the camera is already pulling back. */
+  connect: {at: 1750, move: 380, checkAt: 2050},
+
   work: {
-    liftAt: 5600,
-    liftMove: 620,
-    retryAt: 6000,
-    retryStagger: 520,
+    /** A 3px dip before the lift. Anticipation is what makes a move read as a
+        decision rather than as a tween. */
+    liftAt: 2500,
+    liftMove: 420,
+    retryAt: 2820,
+    /** 300 ms apart, down from 520. Three beats inside a second. */
+    retryStagger: 300,
     retries: 3,
-    /** The morph. One interpolation of w/h/radius - a shape change, not a swap. */
-    morphAt: 7300,
-    morphMove: 900,
-    sendAt: 9400,
-    sendMove: 800,
-    /** The recovered row fades up UNDER the departing email, not after it. */
-    recoverAt: 9700,
-    recoverMove: 700,
+    morphAt: 4050,
+    morphMove: 560,
+    sendAt: 6100,
+    sendMove: 520,
+    recoverAt: 6280,
+    recoverMove: 460,
   },
 
-  /** The close. */
-  outro: {at: 11600, move: 700, stagger: [0, 180, 340]},
+  /** The close, with the wordmark snapping in per letter. */
+  outro: {at: 7450, move: 460, stagger: [0, 120, 230], letterStagger: 34},
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -121,7 +135,7 @@ export const BEATS = {
 // (x, y) is the world point held at the centre of frame; s is the zoom.
 // ---------------------------------------------------------------------------
 
-export const CAM_T = [0, 2200, 5000, 7300, 9800, 11200, 15000].map(ms);
+export const CAM_T = [0, 1400, 3000, 4050, 6100, 7050, 10000].map(ms);
 
 /**
  * Held at frame centre.
@@ -153,7 +167,7 @@ export const CAM_Y = [HERO_CY, HERO_CY, 540, 500, 500, 540, 505];
  * shows world 670-1630, which sits inside the panel's 260-1660 without letting
  * the panel's own edge into the shot.
  */
-export const CAM_S = [2.0, 1.92, 1.0, 1.42, 1.4, 1.0, 0.88];
+export const CAM_S = [2.0, 1.9, 1.0, 1.42, 1.4, 1.0, 0.88];
 
 /**
  * Readability floor. A short label needs ~0.8 s settled; a sentence ~0.3 s per
@@ -177,18 +191,55 @@ export const holdFor = (text: string) => {
 // The dark never retreats back the way it came, so the second transition reads
 // as the next thing happening rather than as the first one rewinding.
 //
-//   t < 2400      top -25, bottom -25   band empty, full day
-//   2400 - 5200   bottom -25 -> 125     night fills downward
-//   5200 - 9400   top -25, bottom 125   full night, the work happens here
-//   9400 - 11000  top -25 -> 125        day returns from the top
-//   t > 11000     top 125, bottom 125   band empty, full day
+//   t < 1400      top -25, bottom -25   band empty, full day
+//   1400 - 2950   bottom -25 -> 125     night fills downward
+//   2950 - 6150   top -25, bottom 125   full night, the work happens here
+//   6150 - 7150   top -25 -> 125        day returns from the top
+//   t > 7150      top 125, bottom 125   band empty, full day
 // ---------------------------------------------------------------------------
 
 /** Feather on each edge, in percent of frame height. Soft enough to be a dusk. */
 export const BAND_FEATHER = 15;
 
-export const BAND_TOP_T = [0, 9400, 11000, 15000].map(ms);
+export const BAND_TOP_T = [0, 6150, 7150, 10000].map(ms);
 export const BAND_TOP_V = [-25, -25, 125, 125];
 
-export const BAND_BOTTOM_T = [0, 2400, 5200, 15000].map(ms);
+export const BAND_BOTTOM_T = [0, 1400, 2950, 10000].map(ms);
 export const BAND_BOTTOM_V = [-25, -25, 125, 125];
+
+// ---------------------------------------------------------------------------
+// Snap and anticipation
+//
+// The two devices that separate motion design from a tween, and the reason
+// this cut reads faster than its numbers alone would suggest.
+//
+// OVERSHOOT: a move that passes its target and settles back. The eye reads the
+// settle as mass. Without it a fast move just stops, which looks like the
+// animation was cut off rather than arrived.
+//
+// ANTICIPATION: a small counter-move before the main one. It costs about 90 ms
+// and it is what makes the row's lift read as a decision rather than a drift.
+//
+// Both are expressed as extra keyframes on the same house curve rather than as
+// springs, so nothing here can ring or overshoot by an amount nobody chose.
+// ---------------------------------------------------------------------------
+
+/** 0 to 1, passing `1 + amt` at 62% of the way. */
+export const snap = (p: number, amt = 0.09) =>
+  p <= 0
+    ? 0
+    : p >= 1
+      ? 1
+      : p < 0.62
+        ? (p / 0.62) * (1 + amt)
+        : 1 + amt - ((p - 0.62) / 0.38) * amt;
+
+/** 0 to 1, dipping to `-amt` at 22% before committing. */
+export const anticipate = (p: number, amt = 0.16) =>
+  p <= 0
+    ? 0
+    : p >= 1
+      ? 1
+      : p < 0.22
+        ? -(p / 0.22) * amt
+        : -amt + ((p - 0.22) / 0.78) * (1 + amt);

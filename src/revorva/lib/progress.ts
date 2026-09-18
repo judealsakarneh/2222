@@ -24,6 +24,8 @@ export type Progress = {
   recovered: number;
   /** 0 → 1 as the dashboard recedes for the close. */
   recede: number;
+  /** 0 → 1 as the table cascades in at the open. */
+  enter: number;
 };
 
 export const progressAt = (frame: number): Progress => {
@@ -48,6 +50,7 @@ export const progressAt = (frame: number): Progress => {
     morph,
     send: at(W.sendAt, W.sendMove),
     recovered,
-    recede: at(BEATS.outro.at, 900),
+    recede: at(BEATS.outro.at, 620),
+    enter: at(BEATS.enter.at, BEATS.enter.move),
   };
 };

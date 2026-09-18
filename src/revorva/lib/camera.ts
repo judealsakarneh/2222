@@ -43,8 +43,10 @@ export const cameraTransform = (c: Cam) =>
  * That captures zoom as well as pan, which matters here because most of this
  * film's movement is zoom and a pan-only measure would report almost nothing.
  *
- * Capped at 5 px. Past that it stops reading as a lens and starts reading as a
- * blur filter, which is worse than no blur at all.
+ * Capped at 8 px, raised from 5 with the faster cut: the camera now covers the
+ * same ground in two thirds of the time, so the same cap was clipping the peaks
+ * off exactly the moves that most needed the cue. Past 8 it stops reading as a
+ * lens and starts reading as a blur filter, which is worse than no blur at all.
  */
 export const cameraBlur = (frame: number): number => {
   if (frame <= 0) return 0;
@@ -61,5 +63,5 @@ export const cameraBlur = (frame: number): number => {
   const speed = Math.hypot(pb.x - pa.x, pb.y - pa.y); // px per frame
   // 8 px/frame of corner travel earns 1 px of blur. Tuned against the render,
   // not derived: below this the blur is invisible, above it the type softens.
-  return Math.min(5, speed / 8);
+  return Math.min(8, speed / 8);
 };

@@ -6,6 +6,7 @@ import {progressAt} from '../lib/progress';
 import {
   BEATS,
   EASE,
+  snap,
   HEAD_H,
   PANEL,
   ROWS,
@@ -29,15 +30,25 @@ const mono = (size: number, color: string): React.CSSProperties => ({
 });
 
 /** A quiet row. Present so the hero row reads as one of many, not as a poster. */
-const FillerRow: React.FC<{i: number; slot: number; push: number; T: Theme}> = ({i, slot, push, T}) => {
+const FillerRow: React.FC<{i: number; slot: number; push: number; T: Theme; enter: number}> = ({
+  i,
+  slot,
+  push,
+  T,
+  enter,
+}) => {
   const f = FILLER[i];
+  // Each row lands 55 ms after the one above it. The film now opens on movement
+  // rather than on a held frame, which is most of why it reads faster than the
+  // five seconds it actually saved.
+  const e = snap(enter, 0.06);
   return (
     <div
       style={{
         position: 'absolute',
         left: TABLE_X,
         top: TABLE_Y + slot * ROW_H,
-        transform: `translateY(${push}px)`,
+        transform: `translateY(${push + (1 - e) * 26}px)`,
         width: TABLE_W,
         height: ROW_H,
         display: 'flex',
@@ -46,7 +57,7 @@ const FillerRow: React.FC<{i: number; slot: number; push: number; T: Theme}> = (
         borderTop: `1px solid ${T.line}`,
         // The film is not about these. They sit back so the eye never has to
         // decide which row matters.
-        opacity: 0.4,
+        opacity: 0.4 * Math.min(1, enter * 1.8),
       }}
     >
       <div style={{width: 34, height: 34, borderRadius: 10, background: T.surface2}} />
@@ -83,7 +94,7 @@ export const Dashboard: React.FC<{T: Theme}> = ({T}) => {
 
   // The dashboard recedes for the close rather than cutting away. It is still
   // there underneath the lockup, just out of focus and dim.
-  const {recede, morph} = progressAt(frame);
+  const {recede, morph, enter} = progressAt(frame);
 
   // It also gives way while the email is out. Without this the table stayed at
   // full strength behind the card and the frame had two subjects competing;
@@ -102,6 +113,8 @@ export const Dashboard: React.FC<{T: Theme}> = ({T}) => {
         background: T.surface,
         border: `1px solid ${T.line}`,
         boxShadow: T.panelShadow,
+        // The window itself lands with a 2% scale snap under the cascade.
+        transform: `scale(${0.98 + snap(enter, 0.05) * 0.02})`,
         opacity: (1 - recede * 0.72) * (1 - morph * 0.45),
         filter: `blur(${recede * 7 + morph * 3}px)`,
       }}
@@ -215,7 +228,7 @@ export const Dashboard: React.FC<{T: Theme}> = ({T}) => {
  */
 export const FillerRows: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
-  const {recede, morph, lift, recovered} = progressAt(frame);
+  const {recede, morph, lift, recovered, enter} = progressAt(frame);
 
   let f = 0;
   return (
@@ -236,7 +249,12 @@ export const FillerRows: React.FC<{T: Theme}> = ({T}) => {
         // Relaxes with `recovered` so the gap closes as the row settles home,
         // rather than leaving a hole in the table through the close.
         const push = slot > HERO_INDEX ? lift * (1 - recovered) * 62 : 0;
-        return <FillerRow key={slot} i={i} slot={slot} push={push} T={T} />;
+        // Rows further down the table start later. Staggering by SLOT rather
+        // than by list index keeps the cascade travelling downward even though
+        // the hero row is skipped in the middle of it.
+        const delay = (slot * BEATS.enter.stagger) / BEATS.enter.move;
+        const e = Math.max(0, Math.min(1, (enter - delay) / (1 - delay || 1)));
+        return <FillerRow key={slot} i={i} slot={slot} push={push} T={T} enter={e} />;
       })}
     </div>
   );

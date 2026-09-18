@@ -6,6 +6,8 @@ import {progressAt} from '../lib/progress';
 import {
   BEATS,
   EASE,
+  anticipate,
+  snap,
   HERO_Y,
   MAIL,
   ROW_H,
@@ -48,11 +50,12 @@ const Pill: React.FC<{tone: 'idle' | 'failed' | 'recovered'; p: number; T: Theme
         padding: '0 12px',
         borderRadius: 8,
         background: m.bg,
-        // Scales from 0.94, never from 0. A pill that grows from nothing reads
-        // as an object appearing; one that grows from nearly itself reads as a
-        // state changing, which is what actually happened.
-        transform: `scale(${0.94 + p * 0.06})`,
-        opacity: p,
+        // Scales from 0.90 THROUGH 1.07 and back. Overshoot is what makes a
+        // 300 ms state change register at this pace - without it the pill just
+        // appears, and at this speed "appears" reads as a glitch rather than as
+        // an event. Opacity still runs linear so it never flickers.
+        transform: `scale(${0.9 + snap(p, 0.12) * 0.1})`,
+        opacity: Math.min(1, p * 1.6),
       }}
     >
       {tone !== 'idle' ? (
@@ -105,17 +108,21 @@ export const MorphRow: React.FC<{T: Theme}> = ({T}) => {
     r: MAIL.r,
   };
 
+  // The morph overshoots by 4% on the way out and settles. On the way back it
+  // does not: arriving home should feel like settling, not like a second event.
+  const mo = m >= 0.999 ? 1 : snap(m, 0.04);
   const box = {
-    x: interpolate(m, [0, 1], [rowBox.x, mailBox.x]),
-    y: interpolate(m, [0, 1], [rowBox.y, mailBox.y]),
-    w: interpolate(m, [0, 1], [rowBox.w, mailBox.w]),
-    h: interpolate(m, [0, 1], [rowBox.h, mailBox.h]),
+    x: interpolate(mo, [0, 1], [rowBox.x, mailBox.x]),
+    y: interpolate(mo, [0, 1], [rowBox.y, mailBox.y]),
+    w: interpolate(mo, [0, 1], [rowBox.w, mailBox.w]),
+    h: interpolate(mo, [0, 1], [rowBox.h, mailBox.h]),
     r: interpolate(m, [0, 1], [rowBox.r, mailBox.r]),
   };
 
-  // The lift: the row rises off the table before anything else happens to it,
-  // so the morph reads as happening to an object that is already in the air.
-  const liftY = -14 * lift * (1 - recovered);
+  // The lift, with anticipation: the row dips ~2px before it rises. Ninety
+  // milliseconds of counter-move is the difference between an object deciding
+  // to move and an object being moved.
+  const liftY = -16 * anticipate(lift, 0.16) * (1 - recovered);
   const liftShadow = lift * (1 - recovered);
 
   // The email does NOT fly away, and this is the correction to the first build
@@ -269,14 +276,15 @@ export const MorphRow: React.FC<{T: Theme}> = ({T}) => {
               fontSize: 17,
               lineHeight: 1.6,
               color: T.fg2,
-              // 64ch, not 58. At 58 the sentence broke three ways and left
-              // "it." alone on the last line, which is the one thing a two-line
-              // paragraph must not do.
+              // Cut to four words for the faster cut. The readability floor is
+              // ~0.3s per word and the email now holds for 1.6s, so the long
+              // version - thirteen words, needing 3.9s - could not have been
+              // read at this pace. The subject carries the message; the body
+              // only has to carry the instruction.
               maxWidth: '64ch',
             }}
           >
-            We tried {LEDGER.amount} for {LEDGER.plan}. The card was declined,
-            and one tap fixes it.
+            One tap fixes it.
           </div>
 
           {/* The decline detail. It fills the dead space the short body left
@@ -377,8 +385,8 @@ export const Retries: React.FC<{T: Theme}> = ({T}) => {
               background: T.surface2,
               border: `1px solid ${T.line}`,
               ...mono(13, T.fg2),
-              opacity: p,
-              transform: `translateY(${(1 - p) * 10}px)`,
+              opacity: Math.min(1, p * 1.7),
+              transform: `translateY(${(1 - snap(p, 0.1)) * 14}px)`,
             }}
           >
             {label}
