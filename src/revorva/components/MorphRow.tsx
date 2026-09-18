@@ -1,6 +1,7 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
-import {C, COPY, FONT, LEDGER} from '../lib/brand';
+import {COPY, FONT, LEDGER} from '../lib/brand';
+import type {Theme} from '../lib/theme';
 import {progressAt} from '../lib/progress';
 import {
   BEATS,
@@ -30,11 +31,11 @@ const mono = (size: number, color: string): React.CSSProperties => ({
  * read, which is what was asked for - a solid red badge is an alarm, and the
  * subject of this film is the recovery, not the decline.
  */
-const Pill: React.FC<{tone: 'idle' | 'failed' | 'recovered'; p: number}> = ({tone, p}) => {
+const Pill: React.FC<{tone: 'idle' | 'failed' | 'recovered'; p: number; T: Theme}> = ({tone, p, T}) => {
   const map = {
-    idle: {bg: 'transparent', fg: C.fg3, label: 'Processing'},
-    failed: {bg: C.redSoft, fg: C.redLit, label: 'Failed'},
-    recovered: {bg: C.greenSoft, fg: C.greenLit, label: 'Recovered'},
+    idle: {bg: 'transparent', fg: T.fg3, label: 'Processing'},
+    failed: {bg: T.redSoft, fg: T.redLit, label: 'Failed'},
+    recovered: {bg: T.greenSoft, fg: T.greenLit, label: 'Recovered'},
   } as const;
   const m = map[tone];
   return (
@@ -84,7 +85,7 @@ const Pill: React.FC<{tone: 'idle' | 'failed' | 'recovered'; p: number}> = ({ton
  * card is two objects and a moment where neither is real; a morph is one object
  * the viewer never loses track of.
  */
-export const MorphRow: React.FC = () => {
+export const MorphRow: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
   const t = (frame / 60) * 1000;
   const W = BEATS.work;
@@ -153,9 +154,9 @@ export const MorphRow: React.FC = () => {
         transform: `translateY(${liftY}px)`,
         opacity: 1 - rowRecede * 0.92,
         filter: rowRecede > 0.001 ? `blur(${rowRecede * 7}px)` : undefined,
-        background: interpolate(m, [0, 1], [0, 1]) > 0.02 ? C.surface2 : 'transparent',
-        border: m > 0.02 ? `1px solid ${C.line}` : `1px solid transparent`,
-        borderTop: m > 0.02 ? `1px solid ${C.line}` : `1px solid ${C.line}`,
+        background: interpolate(m, [0, 1], [0, 1]) > 0.02 ? T.surface2 : 'transparent',
+        border: m > 0.02 ? `1px solid ${T.line}` : `1px solid transparent`,
+        borderTop: m > 0.02 ? `1px solid ${T.line}` : `1px solid ${T.line}`,
         boxShadow: `0 ${18 * liftShadow + 30 * m}px ${44 * liftShadow + 80 * m}px -${
           10 * liftShadow + 20 * m
         }px rgba(0,0,0,${0.5 * liftShadow + 0.4 * m})`,
@@ -181,7 +182,7 @@ export const MorphRow: React.FC = () => {
             width: 34,
             height: 34,
             borderRadius: 10,
-            background: C.surface2,
+            background: T.surface2,
             flexShrink: 0,
           }}
         />
@@ -190,14 +191,14 @@ export const MorphRow: React.FC = () => {
             fontFamily: FONT.ui,
             fontWeight: 500,
             fontSize: 19,
-            color: C.fg,
+            color: T.fg,
             flex: 1,
             whiteSpace: 'nowrap',
           }}
         >
           {LEDGER.customer}
         </span>
-        <span style={mono(19, C.fg)}>{LEDGER.amount}</span>
+        <span style={mono(19, T.fg)}>{LEDGER.amount}</span>
         <span
           style={{
             width: 160,
@@ -210,13 +211,13 @@ export const MorphRow: React.FC = () => {
               sliding, so the row's right edge never moves. */}
           <span style={{position: 'relative', display: 'inline-flex'}}>
             <span style={{opacity: 1 - failed}}>
-              <Pill tone="idle" p={1} />
+              <Pill tone="idle" p={1} T={T} />
             </span>
             <span style={{position: 'absolute', right: 0, top: 0}}>
-              <Pill tone="failed" p={failed * (1 - recovered)} />
+              <Pill tone="failed" p={failed * (1 - recovered)} T={T} />
             </span>
             <span style={{position: 'absolute', right: 0, top: 0}}>
-              <Pill tone="recovered" p={recovered} />
+              <Pill tone="recovered" p={recovered} T={T} />
             </span>
           </span>
         </span>
@@ -240,11 +241,11 @@ export const MorphRow: React.FC = () => {
         >
           <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
             <span
-              style={{...mono(11, C.fg3), letterSpacing: '0.16em', textTransform: 'uppercase'}}
+              style={{...mono(11, T.fg3), letterSpacing: '0.16em', textTransform: 'uppercase'}}
             >
               To
             </span>
-            <span style={{fontFamily: FONT.ui, fontSize: 16, color: C.fg2}}>
+            <span style={{fontFamily: FONT.ui, fontSize: 16, color: T.fg2}}>
               {LEDGER.customer}
             </span>
           </div>
@@ -255,7 +256,7 @@ export const MorphRow: React.FC = () => {
               fontSize: 34,
               lineHeight: 1.18,
               letterSpacing: '-0.02em',
-              color: C.fg,
+              color: T.fg,
             }}
           >
             {/* Written here, not quoted from Revorva. Their own subject line
@@ -267,7 +268,7 @@ export const MorphRow: React.FC = () => {
               fontFamily: FONT.ui,
               fontSize: 17,
               lineHeight: 1.6,
-              color: C.fg2,
+              color: T.fg2,
               // 64ch, not 58. At 58 the sentence broke three ways and left
               // "it." alone on the last line, which is the one thing a two-line
               // paragraph must not do.
@@ -285,7 +286,7 @@ export const MorphRow: React.FC = () => {
               card, which this audience reads as a test on sight. */}
           <div
             style={{
-              ...mono(13, C.fg3),
+              ...mono(13, T.fg3),
               display: 'flex',
               alignItems: 'center',
               gap: 10,
@@ -304,7 +305,7 @@ export const MorphRow: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               borderRadius: 10,
-              background: C.accent,
+              background: T.accent,
               fontFamily: FONT.ui,
               fontWeight: 600,
               fontSize: 15,
@@ -326,7 +327,7 @@ export const MorphRow: React.FC = () => {
  * beat rather than continuously, because a retry IS a discrete event and
  * smoothing it would misrepresent what the product does.
  */
-export const Retries: React.FC = () => {
+export const Retries: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
   const t = (frame / 60) * 1000;
   const W = BEATS.work;
@@ -373,9 +374,9 @@ export const Retries: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               borderRadius: 8,
-              background: C.surface2,
-              border: `1px solid ${C.line}`,
-              ...mono(13, C.fg2),
+              background: T.surface2,
+              border: `1px solid ${T.line}`,
+              ...mono(13, T.fg2),
               opacity: p,
               transform: `translateY(${(1 - p) * 10}px)`,
             }}
@@ -399,7 +400,7 @@ export const Retries: React.FC = () => {
  * It starts 300 ms before the row begins morphing home, so the send and the
  * return overlap rather than queue.
  */
-export const SentChip: React.FC = () => {
+export const SentChip: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
   const t = (frame / 60) * 1000;
   const W = BEATS.work;
@@ -434,16 +435,16 @@ export const SentChip: React.FC = () => {
           alignItems: 'center',
           gap: 9,
           borderRadius: 999,
-          background: C.greenSoft,
+          background: T.greenSoft,
           border: `1px solid rgba(48,164,108,0.34)`,
           fontFamily: FONT.ui,
           fontWeight: 600,
           fontSize: 14,
-          color: C.greenLit,
+          color: T.greenLit,
           whiteSpace: 'nowrap',
         }}
       >
-        <span style={{width: 6, height: 6, borderRadius: 3, background: C.greenLit}} />
+        <span style={{width: 6, height: 6, borderRadius: 3, background: T.greenLit}} />
         Recovery email sent
       </span>
     </div>

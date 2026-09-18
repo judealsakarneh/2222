@@ -1,6 +1,7 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
-import {C, COPY, FILLER_ROWS, FONT, LEDGER} from '../lib/brand';
+import {COPY, FILLER_ROWS, FONT, LEDGER} from '../lib/brand';
+import type {Theme} from '../lib/theme';
 import {progressAt} from '../lib/progress';
 import {
   BEATS,
@@ -28,7 +29,7 @@ const mono = (size: number, color: string): React.CSSProperties => ({
 });
 
 /** A quiet row. Present so the hero row reads as one of many, not as a poster. */
-const FillerRow: React.FC<{i: number; slot: number; push: number}> = ({i, slot, push}) => {
+const FillerRow: React.FC<{i: number; slot: number; push: number; T: Theme}> = ({i, slot, push, T}) => {
   const f = FILLER[i];
   return (
     <div
@@ -42,16 +43,16 @@ const FillerRow: React.FC<{i: number; slot: number; push: number}> = ({i, slot, 
         display: 'flex',
         alignItems: 'center',
         gap: 24,
-        borderTop: `1px solid ${C.line}`,
+        borderTop: `1px solid ${T.line}`,
         // The film is not about these. They sit back so the eye never has to
         // decide which row matters.
         opacity: 0.4,
       }}
     >
-      <div style={{width: 34, height: 34, borderRadius: 10, background: C.surface2}} />
-      <span style={{fontFamily: FONT.ui, fontSize: 19, color: C.fg2, flex: 1}}>{f.who}</span>
-      <span style={mono(19, C.fg2)}>{f.amt}</span>
-      <span style={{...mono(13, C.fg3), width: 120, textAlign: 'right'}}>{f.state}</span>
+      <div style={{width: 34, height: 34, borderRadius: 10, background: T.surface2}} />
+      <span style={{fontFamily: FONT.ui, fontSize: 19, color: T.fg2, flex: 1}}>{f.who}</span>
+      <span style={mono(19, T.fg2)}>{f.amt}</span>
+      <span style={{...mono(13, T.fg3), width: 120, textAlign: 'right'}}>{f.state}</span>
     </div>
   );
 };
@@ -63,7 +64,7 @@ const FillerRow: React.FC<{i: number; slot: number; push: number}> = ({i, slot, 
  * moves and the window stays, which is the whole reason the piece has no cuts.
  * The only thing that changes is the Stripe connection state in the header.
  */
-export const Dashboard: React.FC = () => {
+export const Dashboard: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
   const t = (frame / 60) * 1000;
 
@@ -98,9 +99,9 @@ export const Dashboard: React.FC = () => {
         width: PANEL.w,
         height: PANEL.h,
         borderRadius: PANEL.r,
-        background: C.surface,
-        border: `1px solid ${C.line}`,
-        boxShadow: '0 40px 120px -30px rgba(0,0,0,0.75)',
+        background: T.surface,
+        border: `1px solid ${T.line}`,
+        boxShadow: T.panelShadow,
         opacity: (1 - recede * 0.72) * (1 - morph * 0.45),
         filter: `blur(${recede * 7 + morph * 3}px)`,
       }}
@@ -113,7 +114,7 @@ export const Dashboard: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           gap: 18,
-          borderBottom: `1px solid ${C.line}`,
+          borderBottom: `1px solid ${T.line}`,
         }}
       >
         <span
@@ -121,13 +122,13 @@ export const Dashboard: React.FC = () => {
             fontFamily: FONT.display,
             fontWeight: 700,
             fontSize: 22,
-            color: C.fg,
+            color: T.fg,
             letterSpacing: '-0.02em',
           }}
         >
           {COPY.wordmark}
         </span>
-        <span style={{...mono(12, C.fg3), textTransform: 'uppercase', letterSpacing: '0.16em'}}>
+        <span style={{...mono(12, T.fg3), textTransform: 'uppercase', letterSpacing: '0.16em'}}>
           Payments
         </span>
 
@@ -143,7 +144,7 @@ export const Dashboard: React.FC = () => {
             alignItems: 'center',
             gap: 10,
             borderRadius: 10,
-            background: interpolate(connect, [0, 1], [1, 0]) > 0.5 ? C.accent : C.greenSoft,
+            background: interpolate(connect, [0, 1], [1, 0]) > 0.5 ? T.accent : T.greenSoft,
             border: `1px solid ${connect > 0.5 ? 'rgba(48,164,108,0.4)' : 'transparent'}`,
           }}
         >
@@ -152,7 +153,7 @@ export const Dashboard: React.FC = () => {
               width: 18,
               height: 18,
               borderRadius: 9,
-              background: connect > 0.5 ? C.green : 'rgba(255,255,255,0.9)',
+              background: connect > 0.5 ? T.green : 'rgba(255,255,255,0.9)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -164,7 +165,7 @@ export const Dashboard: React.FC = () => {
               <path
                 d="M2 5.6 L4.4 8 L9 3"
                 fill="none"
-                stroke={C.surface}
+                stroke={T.surface}
                 strokeWidth="1.9"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -178,7 +179,7 @@ export const Dashboard: React.FC = () => {
               fontFamily: FONT.ui,
               fontWeight: 600,
               fontSize: 14,
-              color: connect > 0.5 ? C.greenLit : '#FFFFFF',
+              color: connect > 0.5 ? T.greenLit : '#FFFFFF',
               whiteSpace: 'nowrap',
             }}
           >
@@ -198,9 +199,9 @@ export const Dashboard: React.FC = () => {
           gap: 24,
         }}
       >
-        <span style={{...mono(11, C.fg3), flex: 1, letterSpacing: '0.14em'}}>CUSTOMER</span>
-        <span style={{...mono(11, C.fg3), letterSpacing: '0.14em'}}>AMOUNT</span>
-        <span style={{...mono(11, C.fg3), width: 120, textAlign: 'right', letterSpacing: '0.14em'}}>
+        <span style={{...mono(11, T.fg3), flex: 1, letterSpacing: '0.14em'}}>CUSTOMER</span>
+        <span style={{...mono(11, T.fg3), letterSpacing: '0.14em'}}>AMOUNT</span>
+        <span style={{...mono(11, T.fg3), width: 120, textAlign: 'right', letterSpacing: '0.14em'}}>
           STATUS
         </span>
       </div>
@@ -212,7 +213,7 @@ export const Dashboard: React.FC = () => {
  * The filler rows, drawn in world space rather than inside the panel so the
  * hero row can sit among them in the same coordinate system and still lift out.
  */
-export const FillerRows: React.FC = () => {
+export const FillerRows: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
   const {recede, morph, lift, recovered} = progressAt(frame);
 
@@ -235,7 +236,7 @@ export const FillerRows: React.FC = () => {
         // Relaxes with `recovered` so the gap closes as the row settles home,
         // rather than leaving a hole in the table through the close.
         const push = slot > HERO_INDEX ? lift * (1 - recovered) * 62 : 0;
-        return <FillerRow key={slot} i={i} slot={slot} push={push} />;
+        return <FillerRow key={slot} i={i} slot={slot} push={push} T={T} />;
       })}
     </div>
   );

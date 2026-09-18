@@ -163,3 +163,32 @@ export const holdFor = (text: string) => {
   const words = text.trim().split(/\s+/).length;
   return words <= 2 ? 800 : Math.max(800, words * 300);
 };
+
+// ---------------------------------------------------------------------------
+// The night band
+//
+// Night is not crossfaded in, it is WIPED in - see the note at the top of
+// theme.ts for why a crossfade is not an option here. The band is the region of
+// frame currently showing the night palette, expressed as two edges in percent
+// of frame height, both of which only ever move DOWNWARD.
+//
+// That monotonic direction is deliberate. Night arrives by its bottom edge
+// sweeping down the frame; dawn arrives by its top edge sweeping down and out.
+// The dark never retreats back the way it came, so the second transition reads
+// as the next thing happening rather than as the first one rewinding.
+//
+//   t < 2400      top -25, bottom -25   band empty, full day
+//   2400 - 5200   bottom -25 -> 125     night fills downward
+//   5200 - 9400   top -25, bottom 125   full night, the work happens here
+//   9400 - 11000  top -25 -> 125        day returns from the top
+//   t > 11000     top 125, bottom 125   band empty, full day
+// ---------------------------------------------------------------------------
+
+/** Feather on each edge, in percent of frame height. Soft enough to be a dusk. */
+export const BAND_FEATHER = 15;
+
+export const BAND_TOP_T = [0, 9400, 11000, 15000].map(ms);
+export const BAND_TOP_V = [-25, -25, 125, 125];
+
+export const BAND_BOTTOM_T = [0, 2400, 5200, 15000].map(ms);
+export const BAND_BOTTOM_V = [-25, -25, 125, 125];

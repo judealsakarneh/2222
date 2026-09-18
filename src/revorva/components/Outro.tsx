@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {C, COPY, FONT} from '../lib/brand';
+import {COPY, FONT} from '../lib/brand';
+import type {Theme} from '../lib/theme';
 import {BEATS, EASE} from '../lib/timeline';
 
 /**
@@ -13,7 +14,7 @@ import {BEATS, EASE} from '../lib/timeline';
  *
  * Three elements on a 0 / 180 / 340 ms stagger so they resolve in reading order.
  */
-export const Outro: React.FC = () => {
+export const Outro: React.FC<{T: Theme}> = ({T}) => {
   const frame = useCurrentFrame();
   const t = (frame / 60) * 1000;
   const {at, move, stagger} = BEATS.outro;
@@ -40,7 +41,7 @@ export const Outro: React.FC = () => {
             fontSize: 92,
             letterSpacing: '-0.035em',
             lineHeight: 1,
-            color: C.fg,
+            color: T.fg,
             opacity: word,
             transform: `translateY(${(1 - word) * 12}px)`,
           }}
@@ -52,7 +53,7 @@ export const Outro: React.FC = () => {
             width: 300,
             height: 1,
             margin: '28px auto 0',
-            background: C.accent,
+            background: T.accent,
             transform: `scaleX(${rule})`,
             transformOrigin: 'center',
           }}
@@ -62,7 +63,7 @@ export const Outro: React.FC = () => {
             marginTop: 24,
             fontFamily: FONT.ui,
             fontSize: 20,
-            color: C.fg2,
+            color: T.fg2,
             opacity: line,
             transform: `translateY(${(1 - line) * 12}px)`,
           }}
@@ -75,7 +76,7 @@ export const Outro: React.FC = () => {
             fontFamily: FONT.mono,
             fontSize: 14,
             letterSpacing: '0.18em',
-            color: C.fg3,
+            color: T.fg3,
             opacity: line * 0.9,
           }}
         >
